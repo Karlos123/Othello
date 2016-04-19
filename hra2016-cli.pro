@@ -13,10 +13,13 @@ SOURCES += main.cpp \
     board.cpp \
     game.cpp \
     game-logic.cpp \
-    history.cpp
+    history.cpp \
+    main-game.cpp
 
 HEADERS += \
     board.hpp \
     game.hpp \
     game-logic.hpp \
-    history.hpp
+    history.hpp \
+    types.hpp \
+    main-game.hpp

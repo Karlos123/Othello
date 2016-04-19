@@ -3,22 +3,24 @@
 
 #include <iostream>
 #include "board.hpp"
+#include "types.hpp"
+#include "game-logic.hpp"
+#include "history.hpp"
 
-enum PLAYER{ PBlack, PWhite};
 
 class Game{
-    int numPlayers{1};  // Pocet hracu
-    int turn{PBlack};  // Hrac na tahu
-    bool end{false};  // Identifikator konce hry
-    bool stoneOK{false}; // Kamen spravne umisten
+    TColor playerColor{BLACK};  // Hrac na tahu
+    TPlayer player1, player2;
   public:
-    void setNumPlayers(int N){  numPlayers = N; };
+    Board board;
+    GameLogic gameLogic;
+    History history;
     void nextTurn();
-    bool isEnd(){ return (end); };
-    bool isPlaced() { return stoneOK;  };
-    bool placeStone(int, int, Board&, PLAYER);
-    PLAYER onTurn(){  return(turn == PBlack ?  PBlack : PWhite); };
-    std::string printPlayer(){ return(turn == PWhite ? "white" : "black"); }; // CLI
+    bool isEnd();
+    bool execTurn(int, int, Board&);
+    TColor onTurn()const{ return(playerColor); };
+    std::string getPlayerString()const{ return(playerColor == WHITE ? "white" : "black"); }; // CLI
+    Game(int X, TPlayer A, TPlayer B) : board(X) {player1 = A; player2 = B;};
 };
 
 #endif // GAME_HPP

@@ -2,19 +2,23 @@
 #define BOARD_HPP
 
 #include <vector>
+#include "types.hpp"
 
-enum COLOR { CNone, CBlack, CWhite}; // Typ kamenu
 
 class Board{
     int size{8}; // Velikost hraciho pole
-    std::vector<std::vector<COLOR>> stones; // Kameny na desce
+    TStones stones; // Kameny na desce
   public:
     void construct(int);
     void print() const;
     void draw() const;
-    void putStone(int X, int Y, COLOR color){stones[X][Y] = color;  };
-    bool isEmpty(int X, int Y) { return (stones[X][Y] == CNone);  };
-    int isSize() const { return size; };
+    void putStone(int X, int Y, TColor color){ stones[X][Y] = color; };
+    TColor getStone(const int X, const int Y) const { return(stones[X][Y]); }
+    bool inRange(const int X, const int Y) const;
+    bool isEmpty(int X, int Y) const { return (stones[X][Y] == NONE);  };
+    int getSize() const { return size; };
+    Board(int x);
+
 };
 
 #endif // BOARD_HPP
