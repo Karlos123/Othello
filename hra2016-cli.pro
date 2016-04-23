@@ -14,7 +14,7 @@ SOURCES += main.cpp \
     game.cpp \
     game-logic.cpp \
     history.cpp \
-    main-game.cpp
+    ai1.cpp
 
 HEADERS += \
     board.hpp \
@@ -22,4 +22,4 @@ HEADERS += \
     game-logic.hpp \
     history.hpp \
     types.hpp \
-    main-game.hpp
+    ai1.hpp

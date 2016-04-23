@@ -17,8 +17,12 @@ const Board& History::prevState(const Board& board){
   return (*it);
 }
 
-/* Ulozi aktualni stav desky */
-void History::storeState(Board board){
+/**
+ * Ulozi stav hry
+ * @param board       Aktualni rozlozeni
+ * @param playerColor Hrac ktery bude tahnout
+ */
+void History::storeState(Board board, TColor playerColor){
   states.push_back(board);
   it++;
 }

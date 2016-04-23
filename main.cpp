@@ -69,15 +69,26 @@ int main()
   std::cout << std::setw(2) << " "<< std::endl;
 
   // Priprava
-  Game game{8, HUMAN, HUMAN};
+  Game game{8, HUMAN, AI};
 
   // Hra - Zacatek
   while(!game.isEnd()){
     game.board.print();
     // Nacteni souradnic X,Y a provedeni tahu
-    std::cout << "Place stone (" + game.getPlayerString() << "): " << std::flush;
-    while(!loadCin(X,Y) || !game.execTurn(X-1, Y-1, game.board))
-      std::cout << "Place stone (" + game.getPlayerString() << "): " << std::flush;
+    std::cout << "Playing (" << (game.onTurnColor() == WHITE ? "white" : "black")
+              << "-" << (game.onTurnAI() == AI ? "AI" : "human")  << "): "
+              << (game.onTurnAI() == AI ? "\n" : "") <<  std::flush;
+    // Na tahu umela inteligence
+    if(game.onTurnAI() == AI){
+      game.execTurnAI();
+      continue;
+    }
+
+    while(!loadCin(X,Y) || !game.execTurnHuman(X-1, Y-1))
+      std::cout << "Playing (" << (game.onTurnColor() == WHITE ? "white" : "black")
+              << "-" << (game.onTurnAI() == AI ? "AI" : "human")  << "): "
+              << (game.onTurnAI() == AI ? "\n" : "") <<  std::flush;
   }
-  return 1;
+  std::cout << "END" << std::endl;
+   return 1;
 }

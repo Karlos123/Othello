@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "game-logic.hpp"
 #include "history.hpp"
+#include "ai1.hpp"
 
 
 /**
@@ -18,7 +19,7 @@ void Game::nextTurn(){
  * @param  color Barva kamene/hrace na tahu
  * @return bool  Uspesne | neuspesne polozeni kamene/u
  */
-bool Game::execTurn(int X, int Y, Board& board){
+bool Game::execTurnHuman(int X, int Y){
   Board nextBoard{board.getSize()}; /**< Nove rozlozeni kameu */
 
   try{
@@ -30,10 +31,24 @@ bool Game::execTurn(int X, int Y, Board& board){
     return false;
   }
   board = nextBoard; // Aktualizace desky
-  gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK ); // Nastaveni prohledavani pro dalshio hrace
+  gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK); // Nastaveni prohledavani pro dalshio hrace
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
+  history.storeState(board, playerColor); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
   return true;
+}
+
+/**
+ * @breig Kameny umisti umela inteligence
+ */
+void Game::execTurnAI(){
+  Board nextBoard{board.getSize()}; /**< Nove rozlozeni kameu */
+
+  ai1NextState(board, nextBoard, playerColor); // Inicializace herni logiky pro tah
+  gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK ); // Nastaveni prohledavani pro dalshio hrace
+  board = nextBoard; // Aktualizace desky
+  if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
+    nextTurn();
 }
 
 /**
@@ -50,4 +65,16 @@ bool Game::isEnd(){
   if(gameLogic.canTurn(board))
     return false;
   return true;
+}
+
+/**
+ * Vyhodnoti jestl je nahu clovek nebo pocitac
+ * @return clovek | pocitac (AI)
+ */
+TAI Game::onTurnAI(){
+  if(playerColor == WHITE && player2 == AI)
+    return AI;
+  if(playerColor == BLACK && player1 == AI)
+    return AI;
+  return HUMAN;
 }

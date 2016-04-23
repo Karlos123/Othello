@@ -14,13 +14,16 @@
  */
 bool GameLogic::canTurn(const Board& board){
   TCordVec vecCords, tmp;
-
   // Prohledavani celeho herni desky
   for (int X = 0; X < board.getSize(); X++) {
     for (int Y = 0; Y < board.getSize(); Y++) {
+      if(board.getStone(X, Y) != NONE)
+        continue;
       // Prohledavani okoli kamene na pozici i,j
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
+          if(i%3-1 == 0 && j%3-1 == 0) // Pozice kamene + smery prohledavani je 0 a 0
+            continue;
           tmp = getNewStones(board, X, Y, i%3-1, j%3-1);
           if(!tmp.empty())
             return true;
@@ -93,18 +96,20 @@ void GameLogic::nextState(const Board& oldBoard, Board& newBoard){
   // Prochazeni vsech sousednich poli
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
+      if(i%3-1 == 0 && j%3-1 == 0) // Pozice kamene + smery prohledavani je 0 a 0
+        continue;
       tmp = getNewStones(oldBoard, X, Y, i%3-1, j%3-1);
       vecCords.insert(std::end(vecCords), std::begin(tmp), std::end(tmp));
     }
   }
   // Nepodarilo se najit zadne kameny, ktere by si zahrat
-  if(vecCords.empty())
+  if(vecCords.empty()){
     throw std::out_of_range("Positon not avaible!");
+  }
   // Umisteni kamenu na desku pomoci vektoru souradnic
   newBoard = oldBoard;
   newBoard.putStone(X, Y, playerColor );
   for(TCord i : vecCords){
     newBoard.putStone(i.first, i.second, playerColor);
   }
-
 }
