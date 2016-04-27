@@ -1,5 +1,4 @@
-QT += core
-QT -= gui
+QT += core gui widgets
 
 CONFIG += c++11
 
@@ -14,7 +13,9 @@ SOURCES += main.cpp \
     game.cpp \
     game-logic.cpp \
     history.cpp \
-    ai1.cpp
+    ai1.cpp \
+    guiwindow.cpp \
+    guiboardarea.cpp
 
 HEADERS += \
     board.hpp \
@@ -22,4 +23,6 @@ HEADERS += \
     game-logic.hpp \
     history.hpp \
     types.hpp \
-    ai1.hpp
+    ai1.hpp \
+    guiboardarea.hpp \
+    guiwindow.hpp
