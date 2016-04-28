@@ -27,10 +27,10 @@ void Board::print() const {
           std::cout <<  " ";
           break;
         case BLACK:
-          std::cout << "\u25CB";
+          std::cout << "O";
           break;
         case WHITE:
-          std::cout << "\u25CF";
+          std::cout << "@";
           break;
       }
       std::cout << " ";
