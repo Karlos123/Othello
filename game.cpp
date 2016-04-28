@@ -2,7 +2,9 @@
 #include "game-logic.hpp"
 #include "history.hpp"
 #include "ai1.hpp"
+#include "ai2.hpp"
 
+#include <stdexcept>
 
 /**
  * @breif Prepne tah na dalsiho hrace. Meni promenou playerColor
@@ -34,7 +36,7 @@ bool Game::execTurnHuman(int X, int Y){
   gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK); // Nastaveni prohledavani pro dalshio hrace
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
-  history.storeState(board, playerColor); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
+  history.storeState(board, playerColor, std::make_pair(blackScore, whiteScore)); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
   return true;
 }
 
@@ -43,12 +45,18 @@ bool Game::execTurnHuman(int X, int Y){
  */
 void Game::execTurnAI(){
   Board nextBoard{board.getSize()}; /**< Nove rozlozeni kameu */
+  TAI AI = getAIType();
 
-  ai1NextState(board, nextBoard, playerColor); // Inicializace herni logiky pro tah
+  switch (AI) {
+    case AI_AB: ai2NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci alpa-beta
+    case AI_SIMPLE: ai1NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci SIMPLE algoritmu
+    default: throw  std::invalid_argument("Nezname nastaveni umele inteligence");
+  }
   gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK ); // Nastaveni prohledavani pro dalshio hrace
   board = nextBoard; // Aktualizace desky
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
+  history.storeState(board, playerColor, std::make_pair(blackScore, whiteScore));
 }
 
 /**
@@ -71,10 +79,10 @@ bool Game::isEnd(){
  * Vyhodnoti jestl je nahu clovek nebo pocitac
  * @return clovek | pocitac (AI)
  */
-TAI Game::onTurnAI(){
-  if(playerColor == WHITE && player2 == AI)
+TPlayer Game::onTurnAI(){
+  if(playerColor == WHITE && playerWhite == AI)
     return AI;
-  if(playerColor == BLACK && player1 == AI)
+  if(playerColor == BLACK && playerBlack == AI)
     return AI;
   return HUMAN;
 }

@@ -15,7 +15,8 @@ SOURCES += main.cpp \
     history.cpp \
     ai1.cpp \
     guiwindow.cpp \
-    guiboardarea.cpp
+    guiboardarea.cpp \
+    ai2.cpp
 
 HEADERS += \
     board.hpp \
@@ -25,4 +26,5 @@ HEADERS += \
     types.hpp \
     ai1.hpp \
     guiboardarea.hpp \
-    guiwindow.hpp
+    guiwindow.hpp \
+    ai2.hpp

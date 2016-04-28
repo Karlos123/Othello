@@ -69,7 +69,7 @@ int main()
   std::cout << std::setw(2) << " "<< std::endl;
 
   // Priprava
-  Game game{8, HUMAN, AI};
+  Game game{8, HUMAN, AI, AI_AB};
 
   // Hra - Zacatek
   while(!game.isEnd()){

@@ -10,18 +10,21 @@
 
 class Game{
     TColor playerColor{BLACK};  // Hrac na tahu
-    TAI player1, player2;
+    TPlayer playerBlack, playerWhite;
+    int blackScore{2}, whiteScore{2};
+    TAI AIType;
   public:
     Board board;
     GameLogic gameLogic;
     History history;
-    void nextTurn();
-    bool isEnd();
+    void nextTurn(void);
+    bool isEnd(void);
     bool execTurnHuman(int, int);
     void execTurnAI();
-    TAI onTurnAI();
+    TPlayer onTurnAI();
+    TAI  getAIType(void){return AIType;}
     TColor onTurnColor()const{ return(playerColor); };
-    Game(int X, TAI A, TAI B) : board(X) {player1 = A; player2 = B;};
+    Game(int X, TPlayer A, TPlayer B, TAI AI) : board(X), history(board) {playerBlack = A; playerWhite = B; AIType = AI;};
 };
 
 #endif // GAME_HPP

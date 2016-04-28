@@ -6,13 +6,20 @@
 #include "board.hpp"
 #include "types.hpp"
 
+typedef struct{
+  Board board;
+  TColor playerColor;
+  int blackScore, whiteScore;
+} TState;
+
 class History{
-    std::list<Board> states;
-    std::list<Board>::iterator it{states.begin()};
+    std::list<TState> states;
+    std::list<TState>::iterator it{states.begin()};
   public:
-    void storeState(Board board, TColor);
-    const Board& nextState(Board const&);
-    const Board& prevState(Board const&);
+    void storeState(Board board, TColor playerColor, std::pair<int, int> score);
+    const TState& nextState(Board const&);
+    const TState& prevState(Board const&);
+    History(Board startBoard);
 };
 
 
