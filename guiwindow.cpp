@@ -190,7 +190,7 @@ void GuiWindow::loadGame()
     loadButton->setFont(loadButtonFont);
     loadButton->setText(tr("Load"));
 
-    // vlozit sem connecty na event handlery - aktualne to len zacne hru,
+    // vlozit sem connecty na event handlery - aktualne to sposobi crash,
     // ako by to spravilo default nastavenie novej hry
     connect(loadButton, SIGNAL(clicked(bool)), this, SLOT(game()));
 
@@ -215,8 +215,7 @@ void GuiWindow::game()
 
     clearLayout();
 
-    Game game{boardSize, HUMAN, pve? AI: HUMAN, static_cast<TAI>(ai)};
-    boardArea = new GuiBoardArea(game);
+    boardArea = new GuiBoardArea(boardSize, HUMAN, pve? AI: HUMAN, static_cast<TAI>(ai));
 
     // Grid layout - konecne nieco ine nez Vertical Box
     QGridLayout *gameLayout = new QGridLayout;
