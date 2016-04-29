@@ -20,7 +20,6 @@ public:
     GuiWindow();
 
 private slots:
-    void sizeChanged();
     void newGame();
     void loadGame();
     void game();

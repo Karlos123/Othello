@@ -1,5 +1,7 @@
 //#include <QCoreApplication>
 //#include <QTextStream>
+
+#include <QApplication>
 #include <iostream>
 #include <iomanip>
 #include <limits>
@@ -7,6 +9,7 @@
 #include <string>
 #include <regex>
 #include "game.hpp"
+#include "guiwindow.hpp"
 
 
 
@@ -58,8 +61,17 @@ bool loadCin(int& X, int& Y){
 }
 
 /* MAIN */
-int main()
+int main(int argc, char *argv[])
 {
+  std::cout << "Use GUI? Type y/Y if yes, any other character if not." << std::endl;
+  if(tolower(getchar()) == 'y'){
+      QApplication a(argc, argv);
+      GuiWindow w;
+      w.show();
+
+      return a.exec();
+  }
+
   int X, Y;
 
   // Zacatek hry
