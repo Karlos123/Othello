@@ -1,13 +1,25 @@
 #include "guiboardarea.hpp"
 
 #include <QPainter>
+#include <QMouseEvent>
+#include <iostream>
 
 // Texturu pozadia by bolo zrejme vhodne vlozit sem
-GuiBoardArea::GuiBoardArea(QWidget *parent)
+GuiBoardArea::GuiBoardArea(Game g, QWidget *parent)
     : QWidget(parent)
 {
+    game = g;
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
+
+    /*
+    std::cout << "W: " << width() << ", H: " << height() << std::endl;
+    if(width() < height())
+        fieldSize = width();
+    else
+        fieldSize = height();
+    fieldSize /= g.board.getSize();
+    */
 }
 
 // Qt bez tejto metody vrieska ako male dieta
@@ -22,15 +34,48 @@ QSize GuiBoardArea::sizeHint() const
     return QSize(400, 200);
 }
 
-// Nastavi velkost hracej plochy - odstranit
-void GuiBoardArea::setSize(const int size)
-{
-    this->boardSize = size;
-    update();
+
+void GuiBoardArea::resizeEvent(QResizeEvent * event)
+{   // Tu ani nemusia byt tie event->size(), ale ked je tu ciste len width() tak
+    // prekladac sa stazuje ze je event nepouzity
+    if(event->size().width() < event->size().height())
+        fieldSize = event->size().width();
+    else
+        fieldSize = event->size().height();
+    fieldSize /= game.board.getSize();
 }
 
-// Nastavi atribut rgrad na aktualny kamen
-void GuiBoardArea::setGrad(int player)
+void GuiBoardArea::mousePressEvent(QMouseEvent *event)
+{
+    if (event->button() == Qt::LeftButton) {
+        int x = event->x()/fieldSize; // stlpec (1, 2, ...)
+        int y = event->y()/fieldSize; // riadok (a, b, ...)
+        if(x < game.board.getSize() && y < game.board.getSize()){
+            std::cout << "Hrac na tahu...\n";
+            if(!game.execTurnHuman(x, y)) return;
+            update();
+            if(game.isEnd()){
+                std::cout << "Koniec hry.\n";
+                // fanfary a ine sracky
+                exit(0);
+            }
+            if(game.onTurnAI() == AI){
+                std::cout << "Na tahu je AI...\n";
+                game.execTurnAI();
+                update();
+                if(game.isEnd()){
+                    std::cout << "Koniec hry.\n";
+                    // fanfary a ine sracky - part 2
+                    exit(0);
+                }
+            }
+        }
+    }
+}
+
+
+// Vrati gradient na kamen hraca player
+QRadialGradient GuiBoardArea::setStoneType(int player)
 {
     QRadialGradient radialGradient (fieldSize*5/8, fieldSize*5/8, fieldSize*5/8, fieldSize*5/16, fieldSize*3/16);
     switch(player){
@@ -45,24 +90,17 @@ void GuiBoardArea::setGrad(int player)
             radialGradient.setColorAt(1.0, Qt::black);
             break;
     }
-    this->rgrad = radialGradient;
-    update();
+    return radialGradient;
+    //update();
 }
 
 
 // Metoda, ktora vykresluje hraciu plochu
 void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
 {
+    int boardSize = game.board.getSize();
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing, true);
-
-    // Toto sa presunie, nech sa to vypocita raz pri zacati novej hry a nech sa
-    // to nevypocitava stale dookola - bolo to uzitocne ked sa dalo menit
-    // velkost okna
-    if(width() < height())
-        fieldSize = width()/boardSize;
-    else
-        fieldSize = height()/boardSize;
 
     // Obdlznik (vlastne stvorec) podla ktoreho sa spravi kamen
     QRect rect(fieldSize/8, fieldSize/8, fieldSize*3/4, fieldSize*3/4);
@@ -73,9 +111,10 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
         for (int y = 0; y < boardSize; y++) {
             painter.save();
             painter.translate(x*fieldSize, y*fieldSize);
-            setGrad((x+y)%2);
-            painter.setBrush(rgrad);
-            painter.drawEllipse(rect);
+            if(game.board.getStone(x, y)){
+                painter.setBrush(setStoneType(game.board.getStone(x, y)-1));
+                painter.drawEllipse(rect);
+            }
             painter.restore();
         }
     }
