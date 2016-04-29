@@ -14,6 +14,7 @@ const int IdRole = Qt::UserRole;
 GuiWindow::GuiWindow()
 {
     this->setFixedSize(size());
+    boardArea = new GuiBoardArea;
 
     // MAIN MENU
 
@@ -114,7 +115,7 @@ void GuiWindow::newGame()
     gameTypeComboBox = new QComboBox;
     gameTypeComboBox->addItem(tr("Player vs. Player"), 0);
     gameTypeComboBox->addItem(tr("Player vs. AI"), 1);
-    //gameTypeComboBox->addItem(tr("AI vs. AI"), 2);
+    gameTypeComboBox->addItem(tr("AI vs. AI"), 2);
     gameTypeComboBox->setCurrentIndex(1);
     QLabel *gameTypeLabel = new QLabel(tr("Game type:"));
     gameTypeLabel->setBuddy(gameTypeComboBox);
@@ -140,6 +141,7 @@ void GuiWindow::newGame()
     // vlozit sem connecty na event handlery, teoreticky by stacil jediny connect - na tlacidlo start hry
     // v tom pripade by sa vlastnosti hry zvolene uzivatelom nastavili pred zacatim hry a nereagovalo by sa na zbytocne eventy
     connect(startButton, SIGNAL(clicked(bool)), this, SLOT(game()));
+    connect(boardSizeComboBox, SIGNAL(activated(int)), this, SLOT(sizeChanged()));
 
     // Vertical Box Layout - widgety sa ukladaju pod seba v poradi, v akom sme ich vlozili
     QVBoxLayout *newGameMenuLayout = new QVBoxLayout;
@@ -154,6 +156,7 @@ void GuiWindow::newGame()
 
     // Nastavime layout a aktivujeme sizeChanged, aby sme nastavili velkost hracej plochy
     setLayout(newGameMenuLayout);
+    sizeChanged();
 }
 
 
@@ -209,13 +212,7 @@ void GuiWindow::loadGame()
  */
 void GuiWindow::game()
 {
-    int boardSize = boardSizeComboBox->itemData(boardSizeComboBox->currentIndex(), IdRole).toInt();
-    int pve = gameTypeComboBox->itemData(gameTypeComboBox->currentIndex(), IdRole).toInt();
-
     clearLayout();
-
-    Game game{boardSize, HUMAN, pve? AI: HUMAN};
-    boardArea = new GuiBoardArea(game);
 
     // Grid layout - konecne nieco ine nez Vertical Box
     QGridLayout *gameLayout = new QGridLayout;
@@ -223,4 +220,13 @@ void GuiWindow::game()
     gameLayout->setColumnStretch(3, 1);
     gameLayout->addWidget(boardArea, 0, 0, 2, 4);
     setLayout(gameLayout);
+}
+
+
+/**
+ * @brief Funkcia, ktora sa zavola ak uzivatel zmeni velkost hracej plochy; bola pouzivana na test renderovania hracej plochy
+ */
+void GuiWindow::sizeChanged()
+{
+    boardArea->setSize(boardSizeComboBox->itemData(boardSizeComboBox->currentIndex(), IdRole).toInt());
 }
