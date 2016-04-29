@@ -15,8 +15,9 @@
 bool GameLogic::canTurn(const Board& board){
   TCordVec vecCords, tmp;
   // Prohledavani celeho herni desky
-  for (int X = 0; X < board.getSize(); X++) {
-    for (int Y = 0; Y < board.getSize(); Y++) {
+  int size = board.getSize();
+  for (int X = 0; X < size; X++) {
+    for (int Y = 0; Y < size; Y++) {
       if(board.getStone(X, Y) != NONE)
         continue;
       // Prohledavani okoli kamene na pozici i,j
@@ -35,7 +36,7 @@ bool GameLogic::canTurn(const Board& board){
 }
 
 /**
- * Nastaveni herni logiky
+ * @brief Nastaveni herni logiky
  * @param a  Uzivatelem zadana souradnice X (radek)
  * @param b  Uzivatelem zadana souradnice Y (sloupec )
  * @param c  Barva kamenu aktualniho hrace
@@ -111,5 +112,27 @@ void GameLogic::nextState(const Board& oldBoard, Board& newBoard){
   newBoard.putStone(X, Y, playerColor );
   for(TCord i : vecCords){
     newBoard.putStone(i.first, i.second, playerColor);
+  }
+}
+
+/**
+ * @breif Prepocita skore
+ * @param board      Aktualni deska
+ * @param blackScore Skore cerneho hrace
+ * @param whiteScore Skore bileho hrace
+ */
+void GameLogic::countScore(const Board& board, int& blackScore,int& whiteScore){
+  int size =  board.getSize();
+  blackScore = 0;
+  whiteScore = 0;
+  TColor stone;
+  for (int X = 0; X < size; X++) {
+    for (int Y = 0; Y < size; Y++) {
+      stone = board.getStone(X,Y);
+      if(stone == BLACK)
+        blackScore++;
+      else if(stone == WHITE)
+        whiteScore++;
+    }
   }
 }

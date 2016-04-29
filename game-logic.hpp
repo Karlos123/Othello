@@ -14,6 +14,7 @@ class GameLogic{
     void checkPos(const Board&) const;  /* Kontroluje jestli je policko v rozsahu a je volne. Jinak vyhodi vyjimku "out_of_range" */
     void nextState(const Board& oldBoard, Board& newBoard);  /* Vygeneruje dalsi stav hry za pomoci X, Y a playerColor */
     bool canTurn(const Board&); /* Zjisti jestli muze aktulane nastaveny hrac tahnout kamenem */
+    void countScore(const Board& board, int& blackScore,int& whiteScore); /* Prepocita aktualni skore */
 };
 
 #endif // GAMELOGIC_HPP

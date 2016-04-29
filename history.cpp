@@ -18,21 +18,22 @@ const TState& History::prevState(const Board& board){
 }
 
 /**
- * Ulozi stav hry
+ * @breif Ulozi stav hry
  * @param board       Aktualni rozlozeni
  * @param playerColor Hrac ktery bude tahnout
  */
-void History::storeState(Board board, TColor playerColor, std::pair<int, int> score){
-  TState tmp{board.getSize(), playerColor, score.first, score.second};
+void History::storeState(Board board, TColor playerColor, const int blackScore, const int whiteScore){
   // Odstraneni vsech ulozenych stavu ktere jsou az za aktualni pozici v historii
-  for(auto i = states.end(); it != i; i--)
-    states.erase(i);
-  states.push_back(tmp);
+  if(states.end() != it)
+      states.erase(it++,states.end()++ );
+  /*for(auto i = states.end(); it != i; i--)
+    states.erase(i);*/
+  states.push_back({board, playerColor, blackScore, whiteScore});
   it++;
 }
 
 
 History::History(Board startBoard){
-  TState tmp = {startBoard.getSize(), BLACK, 2, 2};
-  states.push_back(tmp);
+  states.push_back({startBoard.getSize(), BLACK, 2, 2});
+  it = states.begin();
 }

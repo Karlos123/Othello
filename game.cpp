@@ -36,7 +36,8 @@ bool Game::execTurnHuman(int X, int Y){
   gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK); // Nastaveni prohledavani pro dalshio hrace
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
-  history.storeState(board, playerColor, std::make_pair(blackScore, whiteScore)); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
+  gameLogic.countScore(board, blackScore, whiteScore);
+  history.storeState(board, playerColor, blackScore, whiteScore); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
   return true;
 }
 
@@ -56,7 +57,8 @@ void Game::execTurnAI(){
   board = nextBoard; // Aktualizace desky
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
-  history.storeState(board, playerColor, std::make_pair(blackScore, whiteScore));
+  gameLogic.countScore(board, blackScore, whiteScore);
+  history.storeState(board, playerColor, blackScore, whiteScore);
 }
 
 /**

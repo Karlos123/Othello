@@ -75,6 +75,7 @@ int main()
   while(!game.isEnd()){
     game.board.print();
     // Nacteni souradnic X,Y a provedeni tahu
+    std::cout << "Score B: " << game.getScore(BLACK) << " W: " << game.getScore(WHITE) << std::endl << std::endl;
     std::cout << "Playing (" << (game.onTurnColor() == WHITE ? "white" : "black")
               << "-" << (game.onTurnAI() == AI ? "AI" : "human")  << "): "
               << (game.onTurnAI() == AI ? "\n" : "") <<  std::flush;

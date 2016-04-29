@@ -24,6 +24,7 @@ class Game{
     TPlayer onTurnAI();
     TAI  getAIType(void){return AIType;}
     TColor onTurnColor()const{ return(playerColor); };
+    int getScore(TColor player){return player == BLACK ? blackScore : whiteScore;};
     Game(int X, TPlayer A, TPlayer B, TAI AI) : board(X), history(board) {playerBlack = A; playerWhite = B; AIType = AI;};
 };
 

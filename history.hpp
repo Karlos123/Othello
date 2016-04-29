@@ -16,7 +16,7 @@ class History{
     std::list<TState> states;
     std::list<TState>::iterator it{states.begin()};
   public:
-    void storeState(Board board, TColor playerColor, std::pair<int, int> score);
+    void storeState(Board board, TColor playerColor, const int blackScore, const int whiteScore);
     const TState& nextState(Board const&);
     const TState& prevState(Board const&);
     History(Board startBoard);
