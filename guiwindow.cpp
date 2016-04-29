@@ -55,6 +55,7 @@ GuiWindow::GuiWindow()
     setLayout(mainMenuLayout);
 
     setWindowTitle(tr("Othello"));
+    ///TODO: pridat ikonu okna
 }
 
 
@@ -216,6 +217,7 @@ void GuiWindow::game()
     clearLayout();
 
     boardArea = new GuiBoardArea(boardSize, HUMAN, pve? AI: HUMAN, static_cast<TAI>(ai));
+    // Pridat tlacidlo na historiu apod.
 
     // Grid layout - konecne nieco ine nez Vertical Box
     QGridLayout *gameLayout = new QGridLayout;

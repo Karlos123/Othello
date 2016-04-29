@@ -1,5 +1,6 @@
 #include "guiboardarea.hpp"
 
+#include <QThread>
 #include <QPainter>
 #include <QMouseEvent>
 #include <iostream>
@@ -47,27 +48,33 @@ void GuiBoardArea::resizeEvent(QResizeEvent * event)
 
 void GuiBoardArea::mousePressEvent(QMouseEvent *event)
 {
+    if(game.isEnd()){
+        exit(0);
+    }
+    if(game.onTurnAI() == AI){
+        game.execTurnAI();
+        repaint();
+        if(game.isEnd())
+            return;
+    }
     if (event->button() == Qt::LeftButton) {
         int x = event->x()/fieldSize; // stlpec (1, 2, ...)
         int y = event->y()/fieldSize; // riadok (a, b, ...)
         if(x < game.board.getSize() && y < game.board.getSize()){
-            if(!game.execTurnHuman(x, y)) return;
-            //std::cout << "Hrac vykonal tah...\n";
-            repaint();
-            if(game.isEnd()){
-                std::cout << "Koniec hry.\n";
-                // fanfary a ine sracky
-                exit(0);
+            if(!game.execTurnHuman(x, y)){
+                invalidField = (x+1) * 16 + y + 1;
+                repaint();
+                QThread::msleep(150);
+                invalidField = 0;
+                repaint();
+                return;
             }
+            repaint();
+            if(game.isEnd())
+                return;
             if(game.onTurnAI() == AI){
-                //std::cout << "Na tahu je AI...\n";
                 game.execTurnAI();
                 repaint();
-                if(game.isEnd()){
-                    std::cout << "Koniec hry.\n";
-                    // fanfary a ine sracky - part 2
-                    exit(0);
-                }
             }
         }
     }
@@ -104,6 +111,7 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
 {
     int boardSize = game.board.getSize();
     QPainter painter(this);
+    painter.translate(1,1);  // Posunutie od laveho horneho rohu, lepsie to potom vyzera
     painter.setRenderHint(QPainter::Antialiasing, true);
 
     // Obdlznik (vlastne stvorec) podla ktoreho sa spravi kamen
@@ -170,4 +178,41 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
     }
     painter.drawLine(0, fieldSize*boardSize/2, fieldSize*boardSize, fieldSize*boardSize/2);
     painter.drawLine(fieldSize*boardSize/2, 0, fieldSize*boardSize/2, fieldSize*boardSize);
+
+    if(game.isEnd()){
+        painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
+        painter.setOpacity(0.5);
+        painter.drawRect(QRect(0, 0, width(), height()));
+        painter.setOpacity(1);
+        painter.setBrush(QBrush(Qt::white, Qt::SolidPattern));
+        painter.drawRect(QRect(width()/2 - 150, height()/2 - 100, 300, 150));
+
+
+        font.setPointSize(font.pointSize() * 2);
+        painter.setFont(font);
+        painter.drawText(width()/2-107, height()/2-50, "Game Over");
+        font.setPointSize(font.pointSize() * 0.5);
+        painter.setFont(font);
+        if(game.getScore(BLACK) > game.getScore(WHITE))
+            painter.drawText(width()/2-50, height()/2, "Black wins");
+        else if(game.getScore(BLACK) < game.getScore(WHITE))
+            painter.drawText(width()/2-52, height()/2, "White wins");
+        else
+            painter.drawText(width()/2-25, height()/2, "Draw");
+        font.setPointSize(font.pointSize() * 0.5);
+        painter.setFont(font);
+        painter.drawText(width()/2-85, height()/2+45, "Click anywhere to close this window");
+        return;
+    }
+
+    // Vyfarbenie stvorceka, kam sa hrac pokusil vykonat ilegalny tah
+    if(invalidField){
+        int invX, invY;
+        invX = invalidField/16 - 1;
+        invY = invalidField%16 - 1;
+        painter.setBrush(QBrush(Qt::red, Qt::SolidPattern));
+        painter.setOpacity(0.25);
+        painter.drawRect(QRect(invX*fieldSize-1, invY*fieldSize-1, fieldSize, fieldSize));
+        painter.setOpacity(1);
+    }
 }
