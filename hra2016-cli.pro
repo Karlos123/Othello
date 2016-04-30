@@ -5,6 +5,7 @@ CONFIG += c++11
 TARGET = hra2016-cli
 CONFIG += console
 CONFIG -= app_bundle
+RESOURCES = hra2016-cli.qrc
 
 TEMPLATE = app
 

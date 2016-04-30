@@ -107,6 +107,7 @@ void GuiWindow::newGame()
     boardSizeComboBox->addItem(tr("10"), 10);
     boardSizeComboBox->addItem(tr("12"), 12);
     boardSizeComboBox->setCurrentIndex(1);
+    boardSizeComboBox->setMinimumHeight(boardSizeComboBox->height()*0.05);
     QLabel *boardSizeLabel = new QLabel(tr("Board &Size:"));
     boardSizeLabel->setBuddy(boardSizeComboBox);
     boardSizeLabel->setAlignment(Qt::AlignBottom);
@@ -117,6 +118,7 @@ void GuiWindow::newGame()
     gameTypeComboBox->addItem(tr("Player vs. AI"), 1);
     //gameTypeComboBox->addItem(tr("AI vs. AI"), 2);
     gameTypeComboBox->setCurrentIndex(1);
+    gameTypeComboBox->setMinimumHeight(gameTypeComboBox->height()*0.05);
     QLabel *gameTypeLabel = new QLabel(tr("Game type:"));
     gameTypeLabel->setBuddy(gameTypeComboBox);
     gameTypeLabel->setAlignment(Qt::AlignBottom);

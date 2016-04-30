@@ -26,8 +26,8 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    int fieldSize;         // Velkost policka jedneho kamena - aby sa to nemuselo dookola prepocitavat
-    char invalidField;     // Pole, na ktore klikol uzivatel a nie je tam mozne umiestnit kamen
+    int fieldSize;          // Velkost policka jedneho kamena - aby sa to nemuselo dookola prepocitavat
+    uchar invalidField;     // Pole, na ktore klikol uzivatel a nie je tam mozne umiestnit kamen
 };
 
 #endif // GUIBOARDAREA_H
