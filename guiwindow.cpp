@@ -166,6 +166,7 @@ void GuiWindow::newGame()
  */
 void GuiWindow::loadGame()
 {
+    /*
     clearLayout();
 
     // LOAD GAME MENU
@@ -195,7 +196,7 @@ void GuiWindow::loadGame()
 
     // vlozit sem connecty na event handlery - aktualne to sposobi crash,
     // ako by to spravilo default nastavenie novej hry
-    connect(loadButton, SIGNAL(clicked(bool)), this, SLOT(game()));
+    connect(loadButton, SIGNAL(clicked(bool)), this, SLOT(saveGame()));
 
     // Otrepany Vertical Box layout
     QVBoxLayout *loadGameMenuLayout = new QVBoxLayout;
@@ -205,26 +206,91 @@ void GuiWindow::loadGame()
     loadGameMenuLayout->addWidget(loadButton);
 
     setLayout(loadGameMenuLayout);
+    */
+
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Load Saved Game"), "", tr("Othello Save Game Files (*.osf)"));
+    if(fileName.isNull())
+        return;
+
+    QByteArray save = boardArea->game.loadGame(fileName);
+    if(save == "")
+        return;
+
+    game(save);
 }
 
 /**
  * @brief
  */
-void GuiWindow::game()
+void GuiWindow::game(QByteArray save)
 {
-    int boardSize = boardSizeComboBox->itemData(boardSizeComboBox->currentIndex(), IdRole).toInt();
-    int pve = gameTypeComboBox->itemData(gameTypeComboBox->currentIndex(), IdRole).toInt();
-    int ai = aiSelectComboBox->itemData(aiSelectComboBox->currentIndex(), IdRole).toInt();
+    uchar boardSize, pve, ai;
+    if(save.isEmpty()){
+        boardSize = boardSizeComboBox->itemData(boardSizeComboBox->currentIndex(), IdRole).toInt();
+        pve = gameTypeComboBox->itemData(gameTypeComboBox->currentIndex(), IdRole).toInt();
+        ai = aiSelectComboBox->itemData(aiSelectComboBox->currentIndex(), IdRole).toInt();
+    }
+    else{
+        boardSize = save.at(0);
+        pve = save.at(1);
+        ai = save.at(1) - 1;
+    }
 
     clearLayout();
 
     boardArea = new GuiBoardArea(boardSize, HUMAN, pve? AI: HUMAN, static_cast<TAI>(ai));
+    if(!save.isEmpty())
+        for(int i = 2; i < save.length(); i++)
+            boardArea->game.execTurnHuman(static_cast<uchar>(save.at(i))/16, static_cast<uchar>(save.at(i))%16);
+    //boardArea->repaint();
+
     // Pridat tlacidlo na historiu apod.
+
+    QPushButton *saveGameButton = new QPushButton;
+    QFont saveGameButtonFont = saveGameButton->font();
+    saveGameButtonFont.setPointSize(saveGameButtonFont.pointSize()*1.5);
+    saveGameButton->setFont(saveGameButtonFont);
+    saveGameButton->setText(tr("Save Game"));
+
+    QPushButton *histBackButton = new QPushButton;
+    QFont histBackButtonFont = histBackButton->font();
+    histBackButtonFont.setPointSize(histBackButtonFont.pointSize()*1.5);
+    histBackButton->setFont(histBackButtonFont);
+    histBackButton->setText(tr("◄")); // ◄ ←
+    QPushButton *histRevtButton = new QPushButton;
+    QFont histRevtButtonFont = histRevtButton->font();
+    histRevtButtonFont.setPointSize(histRevtButtonFont.pointSize()*1.5);
+    histRevtButton->setFont(histRevtButtonFont);
+    histRevtButton->setText(tr("Revert"));
+    QPushButton *histForwButton = new QPushButton;
+    QFont histForwButtonFont = histForwButton->font();
+    histForwButtonFont.setPointSize(histForwButtonFont.pointSize()*1.5);
+    histForwButton->setFont(histForwButtonFont);
+    histForwButton->setText(tr("►")); // ► →
+
+
+    connect(saveGameButton, SIGNAL(clicked(bool)), this, SLOT(saveGame()));
+
 
     // Grid layout - konecne nieco ine nez Vertical Box
     QGridLayout *gameLayout = new QGridLayout;
-    gameLayout->setColumnStretch(0, 1);
-    gameLayout->setColumnStretch(3, 1);
-    gameLayout->addWidget(boardArea, 0, 0, 2, 4);
+    //gameLayout->setColumnStretch(0, 1);
+    //gameLayout->setColumnStretch(4, 1);
+    gameLayout->addWidget(boardArea, 0, 0, 5, 5);
+    gameLayout->addWidget(histBackButton, 5, 0, 1, 1);
+    gameLayout->addWidget(histRevtButton, 5, 1, 1, 1);
+    gameLayout->addWidget(histForwButton, 5, 2, 1, 1);
+    gameLayout->addWidget(saveGameButton, 5, 4, 1, 1);
     setLayout(gameLayout);
+}
+
+void GuiWindow::saveGame()
+{
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Game..."), "", tr("Othello Save Game Files (*.osf)"));
+    if(fileName.isNull())
+        return;
+
+    // Aktualne to dookola ponuka ulozenie hry kym sa ju nepodari ulozit, alebo uzivatel neda Cancel
+    if(boardArea->game.saveGame(fileName))
+        saveGame();
 }

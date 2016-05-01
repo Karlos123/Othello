@@ -2,6 +2,9 @@
 #define GAME_HPP
 
 #include <iostream>
+#include <QByteArray>
+#include <QString>
+
 #include "board.hpp"
 #include "types.hpp"
 #include "game-logic.hpp"
@@ -19,11 +22,14 @@ class Game{
     History history;
     void nextTurn(void);
     bool isEnd(void);
+    bool isPvEGame() {return(playerWhite == AI);};
     bool execTurnHuman(int, int);
     void execTurnAI();
     TPlayer onTurnAI();
     TAI  getAIType(void){return AIType;}
     TColor onTurnColor()const{ return(playerColor); };
+    int saveGame(QString fileName);
+    QByteArray loadGame(QString fileName);
     int getScore(TColor player){return player == BLACK ? blackScore : whiteScore;};
     Game(int X, TPlayer A, TPlayer B, TAI AI) : board(X), history(board) {playerBlack = A; playerWhite = B; AIType = AI;};
 };

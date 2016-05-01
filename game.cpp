@@ -5,6 +5,7 @@
 #include "ai2.hpp"
 
 #include <stdexcept>
+#include <QFile>
 
 /**
  * @breif Prepne tah na dalsiho hrace. Meni promenou playerColor
@@ -87,4 +88,56 @@ TPlayer Game::onTurnAI(){
   if(playerColor == BLACK && playerBlack == AI)
     return AI;
   return HUMAN;
+}
+
+/**
+ * Ulozi rozohranu hru do suboru s nazvom FileName
+ * @return 0 ak sa operacia vydarila, nenulova hodnota v pripade chyby
+ */
+int Game::saveGame(QString fileName){
+    QByteArray save;
+    save.append(board.getSize());
+    if(isPvEGame()) // vlozit podmienku, ze ci je druhy hrac AI
+        save.append(static_cast<uchar>(getAIType()) + 1);
+    else
+        save.append(static_cast<char>(0));
+
+    // Pridanie postupnosti vykonanych tahov do QByteArray - preiterovat cez historiu
+
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly))
+        return 1;
+
+    file.write(save);
+    file.close();
+
+    return 0;
+}
+
+/**
+ * Nacita rozohranu hru zo suboru s nazvom FileName
+ * @return bajtove pole ulozenej hry ak sa operacia vydarila, prazdne bajtove pole v pripade chyby
+ */
+QByteArray Game::loadGame(QString fileName){
+    QFile file(fileName);
+    if(!file.open(QIODevice::ReadOnly))
+        return "";
+
+    QByteArray save = file.readAll();
+    file.close();
+
+    // Kontrola Save Game suboru
+
+    // Kontrola velkosti: +2 znaky kvoli informaciam o velkosti pola a AI, -4 znaky kvoli pociatocnym 4 kamenom
+    if(save.length() > save.at(0)*save.at(0) - 2)
+        return "";
+
+    // Kontrola, ci policka su v platnom rozsahu hodnot
+    for(uchar i = 2; i < save.length(); i++)
+        if(save.at(i)/16 > save.at(0) || save.at(i)%16 > save.at(0))
+            return "";
+
+    // Validita tahov sa uz asi nebude overovat...
+
+    return save;
 }
