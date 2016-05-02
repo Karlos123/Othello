@@ -28,12 +28,16 @@ private slots:
     void histBack();
     void histForw();
 
+protected:
+    void mousePressEvent(QMouseEvent *event) Q_DECL_OVERRIDE;
+
 private:
     GuiBoardArea *boardArea;
     QComboBox *boardSizeComboBox; // Vyber velkosti hracieho pola
     QComboBox *gameTypeComboBox;  // Vyber typu hry
     QComboBox *aiSelectComboBox;  // Vyber AI
     QLineEdit *fileNameLine;      // Nazov suboru
+    bool gameInitialized;
 };
 
 #endif // GUIWINDOW_H

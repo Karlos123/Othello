@@ -138,6 +138,8 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
     int fSize = fieldSize*boardSize/8; // pouzivany ako default velkost kamenov, ktore sa vykresluju vedla hracej plochy
 
     QFont font = painter.font();
+    font.setPointSize(8);
+    font.setPointSizeF(8.25);
     font.setPointSize(font.pointSize() * 2);
     painter.setFont(font);
 

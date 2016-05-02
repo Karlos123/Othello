@@ -4,7 +4,7 @@
 #include <QtWidgets>
 #include <QVBoxLayout>
 
-const int IdRole = Qt::UserRole;
+//const int IdRole = Qt::UserRole;
 
 
 /**
@@ -14,6 +14,7 @@ const int IdRole = Qt::UserRole;
 GuiWindow::GuiWindow()
 {
     this->setFixedSize(size());
+    gameInitialized = false;
 
     // MAIN MENU
 
@@ -226,9 +227,9 @@ void GuiWindow::game(QByteArray save)
 {
     uchar boardSize, pve, ai;
     if(save.isEmpty()){
-        boardSize = boardSizeComboBox->itemData(boardSizeComboBox->currentIndex(), IdRole).toInt();
-        pve = gameTypeComboBox->itemData(gameTypeComboBox->currentIndex(), IdRole).toInt();
-        ai = aiSelectComboBox->itemData(aiSelectComboBox->currentIndex(), IdRole).toInt();
+        boardSize = boardSizeComboBox->itemData(boardSizeComboBox->currentIndex(), Qt::UserRole).toInt();
+        pve = gameTypeComboBox->itemData(gameTypeComboBox->currentIndex(), Qt::UserRole).toInt();
+        ai = aiSelectComboBox->itemData(aiSelectComboBox->currentIndex(), Qt::UserRole).toInt();
     }
     else{
         boardSize = save.at(0);
@@ -285,16 +286,21 @@ void GuiWindow::game(QByteArray save)
    // gameLayout->addWidget(histRevtButton, 5, 1, 1, 1);
     gameLayout->addWidget(histForwButton, 5, 1, 1, 1);
     gameLayout->addWidget(saveGameButton, 5, 4, 1, 1);
+    gameInitialized = true;
     setLayout(gameLayout);
 }
 
 void GuiWindow::saveGame()
 {
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Game..."), "", tr("Othello Save Game Files (*.osf)"));
+    if(boardArea->game.isEnd())
+        exit(0);
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Game..."), "", tr("Othello Save Game Files (*.osf)")); // ;;All Files(*.*)
     if(fileName.isNull())
         return;
 
     // Aktualne to dookola ponuka ulozenie hry kym sa ju nepodari ulozit, alebo uzivatel neda Cancel
+    if(!fileName.endsWith(".osf"))
+      fileName += ".osf";
     if(boardArea->game.saveGame(fileName))
         saveGame();
 }
@@ -302,6 +308,8 @@ void GuiWindow::saveGame()
 
 void GuiWindow::histBack()
 {
+    if(boardArea->game.isEnd())
+        exit(0);
     do boardArea->game.setState(boardArea->game.history.prevState());
     while (boardArea->game.onTurnAI() == AI);
     boardArea->repaint();
@@ -310,7 +318,19 @@ void GuiWindow::histBack()
 
 void GuiWindow::histForw()
 {
+    if(boardArea->game.isEnd())
+        exit(0);
     do boardArea->game.setState(boardArea->game.history.nextState());
     while (boardArea->game.onTurnAI() == AI);
     boardArea->repaint();
+}
+
+
+// Event reagujuci na stlacenie mysi, vykonava samotnu hru
+void GuiWindow::mousePressEvent(QMouseEvent *event)
+{
+    if(!gameInitialized)
+        return;
+    if(boardArea->game.isEnd())
+        exit(0);
 }
