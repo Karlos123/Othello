@@ -7,7 +7,7 @@
 #include <iostream>
 
 
-const int MaxDepth = 6; /**< Maximalni hloubka prohledavani */
+const int MaxDepth = 4; /**< Maximalni hloubka prohledavani */
 int size; /**< velikost herniho planu - optimalizace */
 TColor curPlayer; /**< Aktualni hrac na tahu */
 
@@ -103,7 +103,28 @@ int evaluate(const Board& board){
 }
 
 
-
+bool canTurn(const Board& board, TColor player){
+  TCordVec vecCords, tmp;
+  // Prohledavani celeho herni desky
+  int size = board.getSize();
+  for (int X = 0; X < size; X++) {
+    for (int Y = 0; Y < size; Y++) {
+      if(board.getStone(X, Y) != NONE)
+        continue;
+      // Prohledavani okoli kamene na pozici i,j
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          if(i%3-1 == 0 && j%3-1 == 0) // Pozice kamene + smery prohledavani je 0 a 0
+            continue;
+          tmp = findNewVec(board, X, Y, i%3-1, j%3-1, player );
+          if(!tmp.empty())
+            return true;
+        }
+      }
+    }
+  }
+  return false;
+}
 /**
  * @breif Prohledavani stavoveho prostoru pomoci min-max a alpha-beta
  * @param  board Vychozi deska
@@ -115,7 +136,7 @@ int evaluate(const Board& board){
  */
 int minimax(const Board& board, int depth, int a, int b, bool max){
     // Dosazeno max hloubky = ohodnoceni stavu
-    if (depth == 0)
+    if (depth == 0 || (max ? !canTurn(board, WHITE) : !canTurn(board, BLACK)))
         return evaluate(board);
     // Generovani dalsich moznych stavu
     std::vector<Board> possibleMoves;
