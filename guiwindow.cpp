@@ -13,7 +13,9 @@
  */
 GuiWindow::GuiWindow()
 {
-    this->setFixedSize(size());
+    //this->setFixedSize(size());
+    this->setFixedSize(width()/2, height()/2);
+    //this->resize(width()/2, height()/2);
     gameInitialized = false;
 
     // MAIN MENU
@@ -126,8 +128,8 @@ void GuiWindow::newGame()
 
     // ComboBox na vyber typu AI + popis
     aiSelectComboBox = new QComboBox;
-    aiSelectComboBox->addItem(tr("AI 1 (easy)"), 0);
-    aiSelectComboBox->addItem(tr("AI 2 (difficult)"), 1);
+    aiSelectComboBox->addItem(tr("AI 1 (easy)"), AI_SIMPLE);
+    aiSelectComboBox->addItem(tr("AI 2 (difficult)"), AI_AB);
     aiSelectComboBox->setMinimumHeight(aiSelectComboBox->height()*0.05);
     QLabel *aiSelectLabel = new QLabel(tr("AI:"));
     aiSelectLabel->setBuddy(aiSelectComboBox);
@@ -277,6 +279,8 @@ void GuiWindow::game(QByteArray save)
     connect(saveGameButton, SIGNAL(clicked(bool)), this, SLOT(saveGame()));
 
 
+    this->setFixedSize(width()*2, height()*2);
+
     // Grid layout - konecne nieco ine nez Vertical Box
     QGridLayout *gameLayout = new QGridLayout;
     //gameLayout->setColumnStretch(0, 1);
@@ -327,7 +331,7 @@ void GuiWindow::histForw()
 
 
 // Event reagujuci na stlacenie mysi, vykonava samotnu hru
-void GuiWindow::mousePressEvent(QMouseEvent *event)
+void GuiWindow::mousePressEvent(QMouseEvent *)
 {
     if(!gameInitialized)
         return;
