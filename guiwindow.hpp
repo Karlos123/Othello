@@ -25,6 +25,8 @@ private slots:
     void game(QByteArray save = "");
     void saveGame();
     void clearLayout();
+    void histBack();
+    void histForw();
 
 private:
     GuiBoardArea *boardArea;

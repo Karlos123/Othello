@@ -4,9 +4,9 @@
 
 /* Vrati nasledujici stav desky */
 const TState& History::nextState(){
-  if(it == states.end()) // Neni nasledujiciho stavu
-    return (*it);
   it++;
+  if(it == states.end()) // Neni nasledujiciho stavu
+    it--;
   return (*it);
 }
 
@@ -25,8 +25,10 @@ const TState& History::prevState(){
  */
 void History::storeState(Board board, TColor playerColor, const int blackScore, const int whiteScore){
   // Odstraneni vsech ulozenych stavu ktere jsou az za aktualni pozici v historii
-  //if(states.end() != it)
-  //    states.erase(it++,states.end()++ );
+  it++;
+  if(states.end() != it)
+      states.erase(it,states.end());
+  it--;
   states.push_back({board, playerColor, blackScore, whiteScore});
   it++;
 }

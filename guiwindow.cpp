@@ -259,11 +259,11 @@ void GuiWindow::game(QByteArray save)
     histBackButtonFont.setPointSize(histBackButtonFont.pointSize()*1.5);
     histBackButton->setFont(histBackButtonFont);
     histBackButton->setText(tr("◄")); // ◄ ←
-    QPushButton *histRevtButton = new QPushButton;
+    /*QPushButton *histRevtButton = new QPushButton;
     QFont histRevtButtonFont = histRevtButton->font();
     histRevtButtonFont.setPointSize(histRevtButtonFont.pointSize()*1.5);
     histRevtButton->setFont(histRevtButtonFont);
-    histRevtButton->setText(tr("Revert"));
+    histRevtButton->setText(tr("Revert"));*/
     QPushButton *histForwButton = new QPushButton;
     QFont histForwButtonFont = histForwButton->font();
     histForwButtonFont.setPointSize(histForwButtonFont.pointSize()*1.5);
@@ -271,6 +271,8 @@ void GuiWindow::game(QByteArray save)
     histForwButton->setText(tr("►")); // ► →
 
 
+    connect(histBackButton, SIGNAL(clicked(bool)), this, SLOT(histBack()));
+    connect(histForwButton, SIGNAL(clicked(bool)), this, SLOT(histForw()));
     connect(saveGameButton, SIGNAL(clicked(bool)), this, SLOT(saveGame()));
 
 
@@ -280,8 +282,8 @@ void GuiWindow::game(QByteArray save)
     //gameLayout->setColumnStretch(4, 1);
     gameLayout->addWidget(boardArea, 0, 0, 5, 5);
     gameLayout->addWidget(histBackButton, 5, 0, 1, 1);
-    gameLayout->addWidget(histRevtButton, 5, 1, 1, 1);
-    gameLayout->addWidget(histForwButton, 5, 2, 1, 1);
+   // gameLayout->addWidget(histRevtButton, 5, 1, 1, 1);
+    gameLayout->addWidget(histForwButton, 5, 1, 1, 1);
     gameLayout->addWidget(saveGameButton, 5, 4, 1, 1);
     setLayout(gameLayout);
 }
@@ -295,4 +297,20 @@ void GuiWindow::saveGame()
     // Aktualne to dookola ponuka ulozenie hry kym sa ju nepodari ulozit, alebo uzivatel neda Cancel
     if(boardArea->game.saveGame(fileName))
         saveGame();
+}
+
+
+void GuiWindow::histBack()
+{
+    do boardArea->game.setState(boardArea->game.history.prevState());
+    while (boardArea->game.onTurnAI() == AI);
+    boardArea->repaint();
+}
+
+
+void GuiWindow::histForw()
+{
+    do boardArea->game.setState(boardArea->game.history.nextState());
+    while (boardArea->game.onTurnAI() == AI);
+    boardArea->repaint();
 }

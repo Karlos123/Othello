@@ -30,6 +30,7 @@ class Game{
     TColor onTurnColor()const{ return(playerColor); };
     int saveGame(QString fileName);
     QByteArray loadGame(QString fileName);
+    void setState(const TState &state) {board = state.board; playerColor = state.playerColor; blackScore = state.blackScore; whiteScore = state.whiteScore;};
     int getScore(TColor player){return player == BLACK ? blackScore : whiteScore;};
     Game(int X, TPlayer A, TPlayer B, TAI AI) : board(X), history(board) {playerBlack = A; playerWhite = B; AIType = AI;};
 };
