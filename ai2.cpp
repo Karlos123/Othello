@@ -7,9 +7,9 @@
 #include <iostream>
 
 
-const int MaxDepth = 4; /**< Maximalni hloubka prohledavani */
+const int MaxDepth = 5; /**< Maximalni hloubka prohledavani */
 int size; /**< velikost herniho planu - optimalizace */
-TColor curPlayer; /**< Aktualni hrac na tahu */
+
 
 /**
  * @breif  Prohleda od souradnice X, Y pozice novych kamenu pro aukutalniho hrace (playerColor) a vrati vector souradnic novych kamenu
@@ -99,7 +99,7 @@ int evaluate(const Board& board){
           whiteScore++;
       }
     }
-    return curPlayer == BLACK ? blackScore - whiteScore : whiteScore - blackScore;
+    return whiteScore - blackScore;
 }
 
 
