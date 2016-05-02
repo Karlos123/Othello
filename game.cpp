@@ -104,6 +104,8 @@ int Game::saveGame(QString fileName){
 
     // Pridanie postupnosti vykonanych tahov do QByteArray - preiterovat cez historiu
 
+    save.append(QString::fromStdString(history.prepareToStore()));
+
     QFile file(fileName);
     if(!file.open(QIODevice::WriteOnly))
         return 1;
@@ -134,7 +136,7 @@ QByteArray Game::loadGame(QString fileName){
 
     // Kontrola, ci policka su v platnom rozsahu hodnot
     for(uchar i = 2; i < save.length(); i++)
-        if(save.at(i)/16 > save.at(0) || save.at(i)%16 > save.at(0))
+        if(save.at(i)/16 > save.at(0) || save.at(i)%16 > save.at(0) || !((save.at(i)/16)*(save.at(i)%16)))
             return "";
 
     // Validita tahov sa uz asi nebude overovat...

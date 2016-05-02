@@ -25,8 +25,8 @@ const TState& History::prevState(){
  */
 void History::storeState(Board board, TColor playerColor, const int blackScore, const int whiteScore){
   // Odstraneni vsech ulozenych stavu ktere jsou az za aktualni pozici v historii
-  if(states.end() != it)
-      states.erase(it++,states.end()++ );
+  //if(states.end() != it)
+  //    states.erase(it++,states.end()++ );
   states.push_back({board, playerColor, blackScore, whiteScore});
   it++;
 }
@@ -36,27 +36,34 @@ void History::storeState(Board board, TColor playerColor, const int blackScore, 
 
 /**
  * Prevedeni historie na string
- * @param  p1 Inteligence hrace cerny
- * @param  p2 Inteligence hrace bily
- * @return    Historie v podobe retezce
+ * @return    Historia tahov v podobe retezca
  */
-const std::string History::prepareToStore(TPlayer p1, TPlayer p2, TAI aiT){
-  std::string res;
-  int size = begin(states)->board.getSize();
+const std::string History::prepareToStore(){
 
-  res = p1;
-  res += p2;
-  res += aiT;
-  res += size;
-  for(TState& i: states){
-    for (int X = 0; X < size; X++) {
-      for (int Y = 0; Y < size; Y++){
-        res += i.playerColor;
-        res += i.blackScore;
-        res += i.whiteScore;
-        res += i.board.getStone(X, Y);
+  std::string res;
+
+  std::list<TState>::iterator iter{states.begin()};
+  std::list<TState>::iterator niter{states.begin()};
+  niter++;
+  int size = iter->board.getSize();
+
+  bool breaker = false;
+  while(niter != states.end()){
+      for (int x = 0; x < size; x++) {
+          for (int y = 0; y < size; y++){
+              if(iter->board.getStone(x, y) == NONE && niter->board.getStone(x, y) != NONE){
+                res += static_cast<char>((x + 1)*16 + y + 1);
+                breaker = true;
+                break;
+              }
+          }
+          if(breaker){
+              breaker = false;
+              break;
+          }
       }
-    }
+      iter++;
+      niter++;
   }
   return res;
 }

@@ -239,9 +239,11 @@ void GuiWindow::game(QByteArray save)
     clearLayout();
 
     boardArea = new GuiBoardArea(boardSize, HUMAN, pve? AI: HUMAN, static_cast<TAI>(ai));
-    if(!save.isEmpty())
-        for(int i = 2; i < save.length(); i++)
-            boardArea->game.execTurnHuman(static_cast<uchar>(save.at(i))/16, static_cast<uchar>(save.at(i))%16);
+    if(!save.isEmpty()) // Vykonavanie nacitanych tahov z ulozenej hry
+        for(int i = 2; i < save.length(); i++){
+            //std::cout << "Vykonavam tah c. " << i-1 << ": x = " << save.at(i)/16-1 << ", y = " << save.at(i)%16-1 << std::endl;
+            boardArea->game.execTurnHuman(static_cast<uchar>(save.at(i))/16-1, static_cast<uchar>(save.at(i))%16-1);
+        }
     //boardArea->repaint();
 
     // Pridat tlacidlo na historiu apod.

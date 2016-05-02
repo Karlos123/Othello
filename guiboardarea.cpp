@@ -142,17 +142,17 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
     painter.setFont(font);
 
     // Vypisanie textu vedla hracej plochy
-    painter.drawText(fSize*0.375, fSize*0.625, "On turn:");
+    painter.drawText(fSize*0.5, fSize*0.625, "On turn:");
     font.setPointSize(font.pointSize() * 1.5);
     painter.setFont(font);
-    painter.drawText(fSize*0.75, fSize*2.625, "Score");
+    painter.drawText(fSize*1.15, fSize*2.625, "Score");
     font.setPointSize(font.pointSize() * 0.7);
     painter.setFont(font);
-    painter.drawText(fSize*0.74, fSize*3.625, QString::number(game.getScore(BLACK)));
-    painter.drawText(fSize*0.74, fSize*4.625, QString::number(game.getScore(WHITE)));
+    painter.drawText(fSize*1.2, fSize*3.625, QString::number(game.getScore(BLACK)));
+    painter.drawText(fSize*1.2, fSize*4.625, QString::number(game.getScore(WHITE)));
 
     // Vykreslenie kamena hraca na tahu
-    painter.translate(fSize*1.75, 0);
+    painter.translate(fSize*2.25, fSize*0.05);
     painter.setBrush(setStoneType(game.onTurnColor(), fSize));
     painter.drawEllipse(QRect(fSize/8, fSize/8, fSize*3/4, fSize*3/4));
 
@@ -160,7 +160,7 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
     painter.restore();
     painter.save();
     painter.translate(boardSize*fieldSize, 0);
-    painter.translate(fSize*1.25, 0);
+    painter.translate(fSize*1.75, 0);
     painter.translate(0, fSize*3);
     painter.setBrush(setStoneType(BLACK, fSize));
     painter.drawEllipse(QRect(fSize/8, fSize/8, fSize*3/4, fSize*3/4));
