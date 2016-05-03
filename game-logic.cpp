@@ -15,10 +15,12 @@
 bool GameLogic::canTurn(Board& board){
   TCordVec vecCords, tmp;
   int size = board.getSize();
+  TColor stone;
 
   for (int X = 0; X < size; X++) {
     for (int Y = 0; Y < size; Y++) {
-      if(board.getStone(X, Y) != NONE)
+      stone = board.getStone(X, Y);
+      if(stone != NONE && stone != MARKSTONE)
           continue;
       // Prohledavani okoli kamene na pozici i,j
       for (int i = 0; i < 3; i++) {
