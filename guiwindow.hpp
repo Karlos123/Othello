@@ -27,6 +27,7 @@ private slots:
     void clearLayout();
     void histBack();
     void histForw();
+    void hideAISelection();
 
 protected:
     void mousePressEvent(QMouseEvent *) Q_DECL_OVERRIDE;
@@ -36,6 +37,7 @@ private:
     QComboBox *boardSizeComboBox; // Vyber velkosti hracieho pola
     QComboBox *gameTypeComboBox;  // Vyber typu hry
     QComboBox *aiSelectComboBox;  // Vyber AI
+    QLabel *aiSelectLabel;
     QLineEdit *fileNameLine;      // Nazov suboru
     bool gameInitialized;
 };

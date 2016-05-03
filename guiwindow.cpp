@@ -131,7 +131,7 @@ void GuiWindow::newGame()
     aiSelectComboBox->addItem(tr("AI 1 (easy)"), AI_SIMPLE);
     aiSelectComboBox->addItem(tr("AI 2 (difficult)"), AI_AB);
     aiSelectComboBox->setMinimumHeight(aiSelectComboBox->height()*0.05);
-    QLabel *aiSelectLabel = new QLabel(tr("AI:"));
+    aiSelectLabel = new QLabel(tr("AI:"));
     aiSelectLabel->setBuddy(aiSelectComboBox);
     aiSelectLabel->setAlignment(Qt::AlignBottom);
 
@@ -146,6 +146,7 @@ void GuiWindow::newGame()
     // vlozit sem connecty na event handlery, teoreticky by stacil jediny connect - na tlacidlo start hry
     // v tom pripade by sa vlastnosti hry zvolene uzivatelom nastavili pred zacatim hry a nereagovalo by sa na zbytocne eventy
     connect(startButton, SIGNAL(clicked(bool)), this, SLOT(game()));
+    connect(gameTypeComboBox, SIGNAL(activated(int)), this, SLOT(hideAISelection()));
 
     // Vertical Box Layout - widgety sa ukladaju pod seba v poradi, v akom sme ich vlozili
     QVBoxLayout *newGameMenuLayout = new QVBoxLayout;
@@ -163,54 +164,25 @@ void GuiWindow::newGame()
 }
 
 
+void GuiWindow::hideAISelection(){
+    int pve = gameTypeComboBox->itemData(gameTypeComboBox->currentIndex(), Qt::UserRole).toInt();
+    if(pve){
+        aiSelectComboBox->show();
+        aiSelectLabel->show();
+    }
+    else{
+        aiSelectComboBox->hide();
+        aiSelectLabel->hide();
+    }
+}
+
+
 /**
  * @brief "Load Game" menu, treba pridat handler na nacitanie suboru daneho uzivatelom,
  * ak nie je zadany tak aktivovat "New Game" menu?
  */
 void GuiWindow::loadGame()
 {
-    /*
-    clearLayout();
-
-    // LOAD GAME MENU
-
-    // Nadpis "New Game Options"
-    QLabel *loadGameMenuLabel = new QLabel(tr("Load Game"));
-    QFont loadGameMenuLabelFont = loadGameMenuLabel->font();
-    loadGameMenuLabelFont.setWeight(QFont::Bold);
-    loadGameMenuLabelFont.setPointSize(loadGameMenuLabelFont.pointSize()*2);
-    loadGameMenuLabel->setFont(loadGameMenuLabelFont);
-    loadGameMenuLabel->setScaledContents(true);
-    loadGameMenuLabel->setAlignment(Qt::AlignCenter);
-
-    // Riadok, kam sa ma zadat cesta k suboru s ulozenou hrou
-    fileNameLine = new QLineEdit;
-    QLabel *fileNameLabel = new QLabel(tr("Path to the save file:"));
-    fileNameLabel->setBuddy(fileNameLine);
-    fileNameLabel->setAlignment(Qt::AlignBottom);
-
-    // Tlacidlo na nacitanie hry
-    QPushButton *loadButton = new QPushButton;
-    loadButton->setMinimumHeight(loadButton->height()*0.1);
-    QFont loadButtonFont = loadButton->font();
-    loadButtonFont.setPointSize(loadButtonFont.pointSize()*1.5);
-    loadButton->setFont(loadButtonFont);
-    loadButton->setText(tr("Load"));
-
-    // vlozit sem connecty na event handlery - aktualne to sposobi crash,
-    // ako by to spravilo default nastavenie novej hry
-    connect(loadButton, SIGNAL(clicked(bool)), this, SLOT(saveGame()));
-
-    // Otrepany Vertical Box layout
-    QVBoxLayout *loadGameMenuLayout = new QVBoxLayout;
-    loadGameMenuLayout->addWidget(loadGameMenuLabel);
-    loadGameMenuLayout->addWidget(fileNameLabel);
-    loadGameMenuLayout->addWidget(fileNameLine);
-    loadGameMenuLayout->addWidget(loadButton);
-
-    setLayout(loadGameMenuLayout);
-    */
-
     QString fileName = QFileDialog::getOpenFileName(this, tr("Load Saved Game"), "", tr("Othello Save Game Files (*.osf)"));
     if(fileName.isNull())
         return;
@@ -247,7 +219,6 @@ void GuiWindow::game(QByteArray save)
             //std::cout << "Vykonavam tah c. " << i-1 << ": x = " << save.at(i)/16-1 << ", y = " << save.at(i)%16-1 << std::endl;
             boardArea->game.execTurnHuman(static_cast<uchar>(save.at(i))/16-1, static_cast<uchar>(save.at(i))%16-1);
         }
-    //boardArea->repaint();
 
     // Pridat tlacidlo na historiu apod.
 
@@ -262,11 +233,6 @@ void GuiWindow::game(QByteArray save)
     histBackButtonFont.setPointSize(histBackButtonFont.pointSize()*1.5);
     histBackButton->setFont(histBackButtonFont);
     histBackButton->setText(tr("◄")); // ◄ ←
-    /*QPushButton *histRevtButton = new QPushButton;
-    QFont histRevtButtonFont = histRevtButton->font();
-    histRevtButtonFont.setPointSize(histRevtButtonFont.pointSize()*1.5);
-    histRevtButton->setFont(histRevtButtonFont);
-    histRevtButton->setText(tr("Revert"));*/
     QPushButton *histForwButton = new QPushButton;
     QFont histForwButtonFont = histForwButton->font();
     histForwButtonFont.setPointSize(histForwButtonFont.pointSize()*1.5);
@@ -283,11 +249,8 @@ void GuiWindow::game(QByteArray save)
 
     // Grid layout - konecne nieco ine nez Vertical Box
     QGridLayout *gameLayout = new QGridLayout;
-    //gameLayout->setColumnStretch(0, 1);
-    //gameLayout->setColumnStretch(4, 1);
     gameLayout->addWidget(boardArea, 0, 0, 5, 5);
     gameLayout->addWidget(histBackButton, 5, 0, 1, 1);
-   // gameLayout->addWidget(histRevtButton, 5, 1, 1, 1);
     gameLayout->addWidget(histForwButton, 5, 1, 1, 1);
     gameLayout->addWidget(saveGameButton, 5, 4, 1, 1);
     gameInitialized = true;
