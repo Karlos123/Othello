@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 {
   #ifdef OTH_GUI_TEST
   std::cout << "Use GUI? Type y/Y if yes, any other character if not." << std::endl;
-  if(tolower(getchar()) == 'y'){
+            if(tolower(getchar()) == 'y'){
     QApplication a(argc, argv);
     GuiWindow w;
     w.show();

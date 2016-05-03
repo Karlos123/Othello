@@ -71,6 +71,10 @@ void Board::construct(int size){
   stones[size/2-1][size/2] = BLACK;
   stones[size/2][size/2-1] = BLACK;
   stones[size/2][size/2] = WHITE;
+  stones[size/2][size/2+1] = MARKSTONE;
+  stones[size/2+1][size/2] = MARKSTONE;
+  stones[size/2-2][size/2-1] = MARKSTONE;
+  stones[size/2-1][size/2-2] = MARKSTONE;
 }
 
 /* Kontrola jestli je X, Y v rozsahu pole */
