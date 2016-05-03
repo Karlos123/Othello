@@ -24,7 +24,8 @@ const TState& History::prevState(){
 void History::storeState(Board board, TColor playerColor, const int blackScore, const int whiteScore){
   // Odstraneni vsech ulozenych stavu ktere jsou az za aktualni pozici v historii
   if(states.end() != ++it)
-      states.erase(it--, states.end());
+      states.erase(it, states.end());
+  it--;
   states.push_back({board, playerColor, blackScore, whiteScore});
   it++;
 }
