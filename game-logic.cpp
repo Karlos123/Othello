@@ -12,11 +12,21 @@
  * @param  color Barva hrace pro kterehho se prohledava
  * @return bool  True kdyz je mozne jeste pohyb. Jiank false
  */
-bool GameLogic::canTurn(Board& board, bool mark){
+bool GameLogic::canTurn(Board& board, bool mark, bool clean){
   TCordVec vecCords, tmp;
   bool retVal = false;
+
   // Prohledavani celeho herni desky
   int size = board.getSize();
+  if(clean){
+    for (int X = 0; X < size; X++) {
+      for (int Y = 0; Y < size; Y++) {
+        if(board.getStone(X, Y) == MARKSTONE)
+          board.putStone(X, Y, NONE);
+      }
+    }
+  }
+
   for (int X = 0; X < size; X++) {
     for (int Y = 0; Y < size; Y++) {
       if(board.getStone(X, Y) != NONE)
