@@ -16,7 +16,10 @@
 void printDescription(){
   std::cout << "  * Board 8x8" << std::endl
             << "  * Player vs. computer" << std::endl
-            << "  * Only return in history" << std::endl;
+            << "  * Player plays black stones" << std::endl
+            << "  * @ .. White player" << std::endl
+            << "  * O .. Black player" << std::endl
+            << "  * ! .. Possible move" << std::endl;
 }
 
 /* Vytiskne ovladani hry */
