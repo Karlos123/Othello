@@ -15,7 +15,7 @@ void Game::nextTurn(){
 }
 
 /**
- * @breif Umisti kamen/y zadane barvy na desku
+ * @breif Pokusi se provest tah ze souradnic X a Y zadanych clovekem
  * @param  X     Uzivatelem zadana souradnice X (radek)
  * @param  Y     Uzivatelem zadana souradnice Y (sloupec)
  * @param  board Aktulani hraci deska
@@ -28,7 +28,7 @@ bool Game::execTurnHuman(int X, int Y){
   try{
     gameLogic.init(X,Y, playerColor); // Inicializace herni logiky pro tah
     gameLogic.checkPos(board); // Kontrola jestli je policko vubec dostupne
-    gameLogic.cleanBoard(board);
+    gameLogic.cleanBoard(board); // Vycisteni od predchozich znacek
     gameLogic.nextState(board, nextBoard); // Vygeneruje dalsi tah
   }
   catch(...){
@@ -40,8 +40,8 @@ bool Game::execTurnHuman(int X, int Y){
     nextTurn();
   gameLogic.init(0, 0, playerColor); // Nastaveni prohledavani pro dalshio hrace
   if(onTurnAI() != AI)
-    gameLogic.markBoard(board);
-  gameLogic.countScore(board, blackScore, whiteScore);
+    gameLogic.markBoard(board); // Jeslize je na tahu clovek tak se oznaci mozne dalsi tahy
+  gameLogic.countScore(board, blackScore, whiteScore); // Prepocita skore
   history.storeState(board, playerColor, blackScore, whiteScore); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
   return true;
 }
@@ -51,8 +51,8 @@ bool Game::execTurnHuman(int X, int Y){
  */
 void Game::execTurnAI(){
   Board nextBoard{board.getSize()}; /**< Nove rozlozeni kameu */
-  TAI AI = getAIType();
-  gameLogic.cleanBoard(board);
+  TAI AI = getAIType(); /**< Typ vyhodnocovaci logiky */
+  gameLogic.cleanBoard(board); // Vycisteni desky
   switch (AI) {
     case AI_AB: ai2NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci alpa-beta
     case AI_SIMPLE: ai1NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci SIMPLE algoritmu
@@ -65,12 +65,12 @@ void Game::execTurnAI(){
   gameLogic.init(0, 0, playerColor); // Nastaveni prohledavani pro dalshio hrace
   if(onTurnAI() != AI)
     gameLogic.markBoard(board);
-  gameLogic.countScore(board, blackScore, whiteScore);
-  history.storeState(board, playerColor, blackScore, whiteScore);
+  gameLogic.countScore(board, blackScore, whiteScore); // Prepocita skore
+  history.storeState(board, playerColor, blackScore, whiteScore); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
 }
 
 /**
- * @breig Projde herni desku od pro oba hrace a zjsiti jestli z nich alespon jeden muze hrat
+ * @breif Projde herni desku od pro oba hrace a zjsiti jestli z nich alespon jeden muze hrat
  * @return bool True kdyz je mozny nejaky pohyb. False jinak
  */
 bool Game::isEnd(){
@@ -86,7 +86,7 @@ bool Game::isEnd(){
 }
 
 /**
- * Vyhodnoti jestl je nahu clovek nebo pocitac
+ * Vyhodnoti jestli je nahu clovek nebo pocitac
  * @return clovek | pocitac (AI)
  */
 TPlayer Game::onTurnAI(){
@@ -98,8 +98,8 @@ TPlayer Game::onTurnAI(){
 }
 
 /**
- * Ulozi rozohranu hru do suboru s nazvom FileName
- * @return 0 ak sa operacia vydarila, nenulova hodnota v pripade chyby
+ * Ulozi rozehranu hru do suboru s nazvem FileName
+ * @return 0 ak sa operace vydarila, nenulova hodnota v pripade chyby
  */
 int Game::saveGame(QString fileName){
     QByteArray save;
@@ -124,8 +124,8 @@ int Game::saveGame(QString fileName){
 }
 
 /**
- * Nacita rozohranu hru zo suboru s nazvom FileName
- * @return bajtove pole ulozenej hry ak sa operacia vydarila, prazdne bajtove pole v pripade chyby
+ * Nacita rozehranu hru ze souboru s nazvem FileName
+ * @return bajtove pole ulozene hry jestli sa operace vydarila, prazdne bajtove pole v pripade chyby
  */
 QByteArray Game::loadGame(QString fileName){
     QFile file(fileName);

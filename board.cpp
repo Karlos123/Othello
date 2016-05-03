@@ -48,14 +48,6 @@ void Board::print() const {
 }
 
 /**
- * @breif hraci desky na formular
- */
-void Board::draw() const {
-
-  //
-}
-
-/**
  * Vytvori ctvercovou hraci desku o zadane velikost
  * @param size Pozadovana velikost desky
  */
@@ -77,7 +69,12 @@ void Board::construct(int size){
   stones[size/2-1][size/2-2] = MARKSTONE;
 }
 
-/* Kontrola jestli je X, Y v rozsahu pole */
+/**
+ * @breif Zjisti jestli jsou souradnice v rozmezi desky
+ * @param  X Souradnice Xs
+ * @param  Y Souradnice Y
+ * @return   bool True jestli je v rozmezi
+ */
 bool Board::inRange(const int X, const int Y) const{
   return(X >= 0 && Y >= 0 && X <= size-1 && Y <= size-1);
 }

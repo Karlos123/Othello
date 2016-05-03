@@ -7,7 +7,7 @@
 #include <iostream>
 
 /**
- * @breif  Zjisti jestli hrac (playerColor) muze polozit kamen.
+ * @breif  Zjisti jestli hrac muze polozit kamen.
  * @param  board Prohledavana deska
  * @param  color Barva hrace pro kterehho se prohledava
  * @return bool  True kdyz je mozne jeste pohyb. Jiank false
@@ -47,6 +47,10 @@ void GameLogic::init(int a, int b, TColor c){
   playerColor = c;
 }
 
+/**
+ * @breif Oznaci na desce mozne tahy
+ * @param board Aktualni deska
+ */
 void GameLogic::markBoard(Board& board){
   TCordVec vecCords, tmp;
   int size = board.getSize();
@@ -69,6 +73,10 @@ void GameLogic::markBoard(Board& board){
   }
 }
 
+/**
+ * @breif Odstrani znacky o moznych tazich
+ * @param board Aktualni deska
+ */
 void GameLogic::cleanBoard(Board& board){
   int size = board.getSize();
   for (int X = 0; X < size; X++) {

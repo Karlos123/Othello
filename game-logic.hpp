@@ -15,8 +15,8 @@ class GameLogic{
     void nextState(const Board& oldBoard, Board& newBoard);  /* Vygeneruje dalsi stav hry za pomoci X, Y a playerColor */
     bool canTurn(Board&); /* Zjisti jestli muze aktulane nastaveny hrac tahnout kamenem */
     void countScore(const Board& board, int& blackScore,int& whiteScore); /* Prepocita aktualni skore */
-    void markBoard(Board&);
-    void cleanBoard(Board&);
+    void markBoard(Board&); /* Oznaci mozne tahy na desku */
+    void cleanBoard(Board&); /* Odstrani znacky o moznych tazich z desky */
 };
 
 #endif // GAMELOGIC_HPP
