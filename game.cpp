@@ -52,6 +52,7 @@ bool Game::execTurnHuman(int X, int Y){
 void Game::execTurnAI(){
   Board nextBoard{board.getSize()}; /**< Nove rozlozeni kameu */
   TAI AI = getAIType();
+  gameLogic.cleanBoard(board);
   switch (AI) {
     case AI_AB: ai2NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci alpa-beta
     case AI_SIMPLE: ai1NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci SIMPLE algoritmu
