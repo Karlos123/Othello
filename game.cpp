@@ -39,7 +39,7 @@ bool Game::execTurnHuman(int X, int Y){
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
   gameLogic.init(0, 0, playerColor); // Nastaveni prohledavani pro dalshio hrace
-  if(onTurnAI() != AI)
+  if(!onTurnAI())
     gameLogic.markBoard(board); // Jeslize je na tahu clovek tak se oznaci mozne dalsi tahy
   gameLogic.countScore(board, blackScore, whiteScore); // Prepocita skore
   history.storeState(board, playerColor, blackScore, whiteScore); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
@@ -63,7 +63,7 @@ void Game::execTurnAI(){
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
   gameLogic.init(0, 0, playerColor); // Nastaveni prohledavani pro dalshio hrace
-  if(onTurnAI() != AI)
+  if(!onTurnAI())
     gameLogic.markBoard(board);
   gameLogic.countScore(board, blackScore, whiteScore); // Prepocita skore
   history.storeState(board, playerColor, blackScore, whiteScore); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
@@ -89,12 +89,12 @@ bool Game::isEnd(){
  * Vyhodnoti jestli je nahu clovek nebo pocitac
  * @return clovek | pocitac (AI)
  */
-TPlayer Game::onTurnAI(){
+bool Game::onTurnAI(){
   if(playerColor == WHITE && playerWhite == AI)
-    return AI;
+    return true;
   if(playerColor == BLACK && playerBlack == AI)
-    return AI;
-  return HUMAN;
+    return true;
+  return false;
 }
 
 /**

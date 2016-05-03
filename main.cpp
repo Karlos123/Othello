@@ -90,8 +90,8 @@ int main(int argc, char *argv[])
     // Nacteni souradnic X,Y a provedeni tahu
     std::cout << "Score B: " << game.getScore(BLACK) << " W: " << game.getScore(WHITE) << std::endl << std::endl;
     std::cout << "Playing (" << (game.onTurnColor() == WHITE ? "white" : "black")
-              << "-" << (game.onTurnAI() == AI ? "AI" : "human")  << "): "
-              << (game.onTurnAI() == AI ? "\n" : "") <<  std::flush;
+              << "-" << (game.onTurnAI() ? "AI" : "human")  << "): "
+              << (game.onTurnAI() ? "\n" : "") <<  std::flush;
     // Na tahu umela inteligence
     if(game.onTurnAI() == AI){
       game.execTurnAI();
@@ -100,8 +100,8 @@ int main(int argc, char *argv[])
 
     while(!loadCin(X,Y) || !game.execTurnHuman(X-1, Y-1))
       std::cout << "Playing (" << (game.onTurnColor() == WHITE ? "white" : "black")
-              << "-" << (game.onTurnAI() == AI ? "AI" : "human")  << "): "
-              << (game.onTurnAI() == AI ? "\n" : "") <<  std::flush;
+              << "-" << (game.onTurnAI()  ? "AI" : "human")  << "): "
+              << (game.onTurnAI() ? "\n" : "") <<  std::flush;
   }
   std::cout << "END" << std::endl;
    return 1;

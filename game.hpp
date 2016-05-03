@@ -13,7 +13,7 @@
 
 class Game{
     TColor playerColor{BLACK};  /**< Barva kamenu na tahu */
-    TPlayer playerBlack, playerWhite; /**< Logika hracu cerny a bily */
+    TPlayer playerBlack{HUMAN}, playerWhite; /**< Logika hracu cerny a bily */
     int blackScore{2}, whiteScore{2};
     TAI AIType; /**< Typ inteligence, ktera vyhodnocuje dalsi tah */
   public:
@@ -25,7 +25,7 @@ class Game{
     bool isPvEGame() {return(playerWhite == AI);}; /* Zjisti jestli se hraje PC v clovek */
     bool execTurnHuman(int, int); /* Provedeni tahu cloveka */
     void execTurnAI(); /* Provedeni tahu pocitace */
-    TPlayer onTurnAI(); /* Vrati typ inteligence na tahu - HUMAN | AI */
+    bool onTurnAI(); /* Vrati typ inteligence na tahu - HUMAN | AI */
     TAI  getAIType(void){return AIType;} /* Vraci verzi umele inteligence */
     TColor onTurnColor()const{ return(playerColor); }; /* Zjisti jaky hrac je tahu */
     int saveGame(QString fileName); /* Ulozi rozehranou hru */
