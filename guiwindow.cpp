@@ -14,7 +14,7 @@
 GuiWindow::GuiWindow()
 {
     //this->setFixedSize(size());
-    this->setFixedSize(width()/2, height()/2);
+    this->setFixedSize(width()/2.25, height()/1.75);
     //this->resize(width()/2, height()/2);
     gameInitialized = false;
 
@@ -279,7 +279,7 @@ void GuiWindow::game(QByteArray save)
     connect(saveGameButton, SIGNAL(clicked(bool)), this, SLOT(saveGame()));
 
 
-    this->setFixedSize(width()*2, height()*2);
+    this->setFixedSize(width()*2.25, height()*1.75);
 
     // Grid layout - konecne nieco ine nez Vertical Box
     QGridLayout *gameLayout = new QGridLayout;

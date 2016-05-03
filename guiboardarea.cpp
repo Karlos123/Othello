@@ -113,8 +113,11 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
 {
     int boardSize = game.board.getSize();
     QPainter painter(this);
-    painter.translate(1,1);  // Posunutie od laveho horneho rohu, lepsie to potom vyzera
+    int gridOffset = ((width() > height() ? height() : width()) - fieldSize*boardSize)/2;
+    painter.translate(gridOffset, gridOffset);  // Posunutie od laveho horneho rohu, lepsie to potom vyzera
     painter.setRenderHint(QPainter::Antialiasing, true);
+    painter.setBrush(QBrush(Qt::darkGreen, Qt::SolidPattern));
+    painter.drawRect(QRect(0, 0, fieldSize*boardSize, fieldSize*boardSize));
 
     // Obdlznik (vlastne stvorec) podla ktoreho sa spravi kamen
     QRect rect(fieldSize/8, fieldSize/8, fieldSize*3/4, fieldSize*3/4);

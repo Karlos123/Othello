@@ -44,7 +44,7 @@ TCordVec getPossibleStones(const Board& oldBoard, const int X, const int Y, cons
  * @param playerColor Hrac na tahu
  */
 void ai1NextState(const Board& oldBoard, Board& newBoard, const TColor playerColor){
-  TCordVec bestMove{}, tmp{};
+  TCordVec bestMove{}, tmp{}, tmpv{};
   // Prohledavani celeho herni desky
   for (int X = 0; X < oldBoard.getSize(); X++) {
     for (int Y = 0; Y < oldBoard.getSize(); Y++) {
@@ -53,20 +53,23 @@ void ai1NextState(const Board& oldBoard, Board& newBoard, const TColor playerCol
         for (int j = 0; j < 3; j++) {
           if(i%3-1 == 0 && j%3-1 == 0)
             continue;
-          tmp = getPossibleStones(oldBoard, X, Y, i%3-1, j%3-1, playerColor);
-          // Nelezen delsi vektror = vice zmen kamenu
-          if(tmp.size()>bestMove.size()){
-            bestMove =  tmp;
-            bestMove.push_back(std::make_pair(X,Y));
-          }
-          if(tmp.size() == bestMove.size() && tmp.size() != 0){
-            int random = rand() % 2 ;
-            if(random == 1)
-              bestMove =  tmp;
-              bestMove.push_back(std::make_pair(X,Y));
-            }
+          tmpv = getPossibleStones(oldBoard, X, Y, i%3-1, j%3-1, playerColor);
+          if(!tmpv.empty())
+            tmp.insert(tmp.end(), tmpv.begin(), tmpv.end());
         }
       }
+      // Nelezen delsi vektror = vice zmen kamenu
+      if(tmp.size()>bestMove.size()){
+        bestMove = tmp;
+        bestMove.push_back(std::make_pair(X,Y));
+      }
+      if(tmp.size() == bestMove.size() && tmp.size() != 0){
+        int random = rand() % 2 ;
+        if(random == 1)
+          bestMove =  tmp;
+        bestMove.push_back(std::make_pair(X,Y));
+      }
+      tmp = {};
     }
   }
   // Umisteni kamenu na desku pomoci vektoru souradnic

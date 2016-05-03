@@ -54,7 +54,7 @@ TCordVec findNewVec(const Board& oldBoard, const int X, const int Y, const int d
  * @param playerColor   Barva hrace pro ktereho jsou vyhledavany vektory tahu
  */
 void findPossibleMoves(std::vector<Board>& possibleMoves, const Board& oldBoard, const TColor playerColor){
-  TCordVec newStones{};
+  TCordVec newStones{}, tmpv{};
   Board possibleMove{size};
 
   // Prohledavani celeho herni desky
@@ -65,16 +65,19 @@ void findPossibleMoves(std::vector<Board>& possibleMoves, const Board& oldBoard,
         for (int j = 0; j < 3; j++) {
           if(i%3-1 == 0 && j%3-1 == 0)
             continue;
-          newStones = findNewVec(oldBoard, X, Y, i%3-1, j%3-1, playerColor); // Nalezeni noveho vektoru kamenu (souradnic)
-          if(!newStones.empty()){
-            possibleMove = oldBoard; // Inicializace vychozihi desky
-            newStones.push_back(std::make_pair(X,Y)); // Pridani pokladaneho kamene do vektoru
-            for(const TCord& i : newStones) // Umisteni kamenu na desku
-              possibleMove.putStone(i.first, i.second, playerColor);
-            possibleMoves.push_back(possibleMove); // Ulozeni mozneho rozlozeni
-          }
+          tmpv = findNewVec(oldBoard, X, Y, i%3-1, j%3-1, playerColor); // Nalezeni noveho vektoru kamenu (souradnic)
+          if(!tmpv.empty())
+            newStones.insert(newStones.end(), tmpv.begin(), tmpv.end());
         }
       }
+      if(!newStones.empty()){
+        possibleMove = oldBoard; // Inicializace vychozihi desky
+        newStones.push_back(std::make_pair(X,Y)); // Pridani pokladaneho kamene do vektoru
+        for(const TCord& i : newStones) // Umisteni kamenu na desku
+          possibleMove.putStone(i.first, i.second, playerColor);
+        possibleMoves.push_back(possibleMove); // Ulozeni mozneho rozlozeni
+      }
+      newStones = {};
     }
   }
 }
