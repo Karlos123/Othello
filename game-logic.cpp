@@ -12,8 +12,9 @@
  * @param  color Barva hrace pro kterehho se prohledava
  * @return bool  True kdyz je mozne jeste pohyb. Jiank false
  */
-bool GameLogic::canTurn(const Board& board){
+bool GameLogic::canTurn(Board& board, bool mark){
   TCordVec vecCords, tmp;
+  bool retVal = false;
   // Prohledavani celeho herni desky
   int size = board.getSize();
   for (int X = 0; X < size; X++) {
@@ -26,13 +27,19 @@ bool GameLogic::canTurn(const Board& board){
           if(i%3-1 == 0 && j%3-1 == 0) // Pozice kamene + smery prohledavani je 0 a 0
             continue;
           tmp = getNewStones(board, X, Y, i%3-1, j%3-1);
-          if(!tmp.empty())
-            return true;
+          if(!tmp.empty()){
+            if(mark){
+                retVal = true;
+                board.putStone(X, Y, MARKSTONE);
+            }
+            else
+                return true;
+          }
         }
       }
     }
   }
-  return false;
+  return retVal;
 }
 
 /**
@@ -83,7 +90,7 @@ TCordVec GameLogic::getNewStones(const Board& oldBoard, const int X, const int Y
  * @param board Hraci deska
  */
 void GameLogic::checkPos(const Board& board) const {
-  if(!board.inRange(X, Y) || !board.isEmpty(X,Y))
+  if(!board.inRange(X, Y) || !board.isAvailable(X,Y))
     throw std::out_of_range("Positon not avaible!");
 }
 

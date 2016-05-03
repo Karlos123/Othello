@@ -4,7 +4,7 @@
 #include <vector>
 
 // Typ kamene
-typedef enum { NONE, BLACK, WHITE} TColor;
+typedef enum { NONE, BLACK, WHITE, MARKSTONE} TColor;
 
 // Souradnice na hernim planu (X,Y)
 typedef std::pair<int,int> TCord;

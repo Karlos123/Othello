@@ -101,6 +101,7 @@ QRadialGradient GuiBoardArea::setStoneType(TColor player, int fSize)
             radialGradient.setColorAt(1.0, Qt::black);
             break;
         case NONE:
+        case MARKSTONE:
             // ???
             break;
     }
@@ -128,7 +129,10 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
             painter.save();
             painter.translate(x*fieldSize, y*fieldSize);
             if(game.board.getStone(x, y)){
-                painter.setBrush(setStoneType(game.board.getStone(x, y)));
+                QBrush b = setStoneType(game.board.getStone(x, y));
+                if(game.board.getStone(x, y) == MARKSTONE)
+                    b.setStyle(Qt::NoBrush);
+                painter.setBrush(b);
                 painter.drawEllipse(rect);
             }
             painter.restore();
