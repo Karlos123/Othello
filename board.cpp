@@ -23,8 +23,8 @@ void Board::print() const {
     std::cout<< i+1 << " ";
     for (int j = 0; j < Board::size; j++) {
       switch (stones[i][j]){ // typ kamene na policku
-        case NONE:
         case MARKSTONE:
+        case NONE:
           std::cout <<  " ";
           break;
         case BLACK:

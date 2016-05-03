@@ -45,9 +45,10 @@ TCordVec getPossibleStones(const Board& oldBoard, const int X, const int Y, cons
  */
 void ai1NextState(const Board& oldBoard, Board& newBoard, const TColor playerColor){
   TCordVec bestMove{}, tmp{}, tmpv{};
+  int size = oldBoard.getSize();
   // Prohledavani celeho herni desky
-  for (int X = 0; X < oldBoard.getSize(); X++) {
-    for (int Y = 0; Y < oldBoard.getSize(); Y++) {
+  for (int X = 0; X < size; X++) {
+    for (int Y = 0; Y < size; Y++) {
       // Prohledavani okoli kamene na pozici i,j
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {

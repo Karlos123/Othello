@@ -28,6 +28,7 @@ bool Game::execTurnHuman(int X, int Y){
   try{
     gameLogic.init(X,Y, playerColor); // Inicializace herni logiky pro tah
     gameLogic.checkPos(board); // Kontrola jestli je policko vubec dostupne
+    gameLogic.cleanBoard(board);
     gameLogic.nextState(board, nextBoard); // Vygeneruje dalsi tah
   }
   catch(...){
@@ -35,8 +36,11 @@ bool Game::execTurnHuman(int X, int Y){
   }
   board = nextBoard; // Aktualizace desky
   gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK); // Nastaveni prohledavani pro dalshio hrace
-  if(gameLogic.canTurn(board, onTurnAI() == AI? false : true, true)) // Muze protivnik tahnout kamene?
+  if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
+  gameLogic.init(0, 0, playerColor); // Nastaveni prohledavani pro dalshio hrace
+  if(onTurnAI() != AI)
+    gameLogic.markBoard(board);
   gameLogic.countScore(board, blackScore, whiteScore);
   history.storeState(board, playerColor, blackScore, whiteScore); // Ulozeni stavu po tahu a hrace, ktery bude tahnout
   return true;
@@ -48,7 +52,6 @@ bool Game::execTurnHuman(int X, int Y){
 void Game::execTurnAI(){
   Board nextBoard{board.getSize()}; /**< Nove rozlozeni kameu */
   TAI AI = getAIType();
-
   switch (AI) {
     case AI_AB: ai2NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci alpa-beta
     case AI_SIMPLE: ai1NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci SIMPLE algoritmu
@@ -56,8 +59,11 @@ void Game::execTurnAI(){
   }
   gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK ); // Nastaveni prohledavani pro dalshio hrace
   board = nextBoard; // Aktualizace desky
-  if(gameLogic.canTurn(board, onTurnAI() == AI? false : true, true)) // Muze protivnik tahnout kamene?
+  if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
+  gameLogic.init(0, 0, playerColor); // Nastaveni prohledavani pro dalshio hrace
+  if(onTurnAI() != AI)
+    gameLogic.markBoard(board);
   gameLogic.countScore(board, blackScore, whiteScore);
   history.storeState(board, playerColor, blackScore, whiteScore);
 }

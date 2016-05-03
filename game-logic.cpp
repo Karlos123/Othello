@@ -12,44 +12,27 @@
  * @param  color Barva hrace pro kterehho se prohledava
  * @return bool  True kdyz je mozne jeste pohyb. Jiank false
  */
-bool GameLogic::canTurn(Board& board, bool mark, bool clean){
+bool GameLogic::canTurn(Board& board){
   TCordVec vecCords, tmp;
-  bool retVal = false;
-
-  // Prohledavani celeho herni desky
   int size = board.getSize();
-  if(clean){
-    for (int X = 0; X < size; X++) {
-      for (int Y = 0; Y < size; Y++) {
-        if(board.getStone(X, Y) == MARKSTONE)
-          board.putStone(X, Y, NONE);
-      }
-    }
-  }
 
   for (int X = 0; X < size; X++) {
     for (int Y = 0; Y < size; Y++) {
       if(board.getStone(X, Y) != NONE)
-        continue;
+          continue;
       // Prohledavani okoli kamene na pozici i,j
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
           if(i%3-1 == 0 && j%3-1 == 0) // Pozice kamene + smery prohledavani je 0 a 0
             continue;
           tmp = getNewStones(board, X, Y, i%3-1, j%3-1);
-          if(!tmp.empty()){
-            if(mark){
-                retVal = true;
-                board.putStone(X, Y, MARKSTONE);
-            }
-            else
-                return true;
-          }
+          if(!tmp.empty())
+            return true;
         }
       }
     }
   }
-  return retVal;
+  return false;
 }
 
 /**
@@ -62,6 +45,38 @@ void GameLogic::init(int a, int b, TColor c){
   X = a;
   Y = b;
   playerColor = c;
+}
+
+void GameLogic::markBoard(Board& board){
+  TCordVec vecCords, tmp;
+  int size = board.getSize();
+
+  for (int X = 0; X < size; X++) {
+    for (int Y = 0; Y < size; Y++) {
+      if(board.getStone(X, Y) != NONE)
+          continue;
+      // Prohledavani okoli kamene na pozici i,j
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          if(i%3-1 == 0 && j%3-1 == 0) // Pozice kamene + smery prohledavani je 0 a 0
+            continue;
+          tmp = getNewStones(board, X, Y, i%3-1, j%3-1);
+          if(!tmp.empty())
+            board.putStone(X, Y, MARKSTONE);
+        }
+      }
+    }
+  }
+}
+
+void GameLogic::cleanBoard(Board& board){
+  int size = board.getSize();
+  for (int X = 0; X < size; X++) {
+    for (int Y = 0; Y < size; Y++) {
+      if(board.getStone(X, Y) == MARKSTONE)
+        board.putStone(X, Y, NONE);
+    }
+  }
 }
 
 /**
