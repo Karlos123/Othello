@@ -3,7 +3,8 @@
 #include <iostream>
 
 /**
- * @breif  Prohleda od souradnice X, Y pozice novych kamenu pro aukutalniho hrace (playerColor) a vrati vector souradnic novych kamenu
+ * @breif  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych
+ * moznych kamenu pro hrace playerColor a vrati vector souradnic novych kamenu
  * @param  oldBoard Vychozi deska
  * @param  dirX     Smer prohledavani v ose x (radek)
  * @param  dirY     Smer prohledavani v ose y (sloupec)
