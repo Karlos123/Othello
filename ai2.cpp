@@ -8,11 +8,14 @@
 
 
 const int MaxDepth = 4; /**< Maximalni hloubka prohledavani */
+
+// Globalni promenne slouzici k optimalizaci
 int size; /**< velikost herniho planu - optimalizace */
 TColor curPlayer; /**< Aktualni hrac na tahu */
 
 /**
- * @breif  Prohleda od souradnice X, Y pozice novych kamenu pro aukutalniho hrace (playerColor) a vrati vector souradnic novych kamenu
+ * @breif  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych
+ * moznych kamenu pro hrace playerColor a vrati vector souradnic novych kamenu
  * @param  oldBoard Vychozi deska
  * @param  dirX     Smer prohledavani v ose x (radek)
  * @param  dirY     Smer prohledavani v ose y (sloupec)
@@ -20,14 +23,14 @@ TColor curPlayer; /**< Aktualni hrac na tahu */
  * @return          Vektor souradnic X,Y novych kamenu aktulaniho hrace
  */
 TCordVec findNewVec(const Board& oldBoard, const int X, const int Y, const int dirX, const int dirY, TColor playerColor){
-    //Policko neni prazdne
+  // Policko neni prazdne
   if(oldBoard.getStone(X,Y) != NONE)
     return {};
 
-  int i = X+dirX;
-  int j = Y+dirY;
+  int i = X+dirX; /**< Posun na dalsi kamen v ose x */
+  int j = Y+dirY;  /**< Posun na dalsi kamen v ose y */
   TCordVec newStones{}; /**< Vector novych kamenu hrace ktery je na tahu */
-  TColor rivalColor = playerColor == BLACK ? WHITE : BLACK; /**< Soupeova barva */
+  TColor rivalColor = playerColor == BLACK ? WHITE : BLACK; /**< Souperova barva */
 
   // Prohledavej herni pole
   while(oldBoard.inRange(i,j)){
@@ -54,24 +57,26 @@ TCordVec findNewVec(const Board& oldBoard, const int X, const int Y, const int d
  * @param playerColor   Barva hrace pro ktereho jsou vyhledavany vektory tahu
  */
 void findPossibleMoves(std::vector<Board>& possibleMoves, const Board& oldBoard, const TColor playerColor){
-  TCordVec newStones{}, tmpv{};
-  Board possibleMove{size};
+  TCordVec newStones{}; /**<  Vektor novych kamenu */
+  TCordVec tmpv{}; /**< Aktualni pomocny vektor novych kamenu */
+  Board possibleMove{size}; /**< Dalsi mozny tah */
 
   // Prohledavani celeho herni desky
   for (int X = 0; X < size; X++) {
     for (int Y = 0; Y < size; Y++) {
-      // Prohledavani okoli kamene na pozici i,j
+      // Prohledavani okoli kamene
       for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
           if(i%3-1 == 0 && j%3-1 == 0)
             continue;
           tmpv = findNewVec(oldBoard, X, Y, i%3-1, j%3-1, playerColor); // Nalezeni noveho vektoru kamenu (souradnic)
           if(!tmpv.empty())
-            newStones.insert(newStones.end(), tmpv.begin(), tmpv.end());
+            newStones.insert(newStones.end(), tmpv.begin(), tmpv.end()); // Sjednoceni vektoru
         }
       }
+      // Nalezen novy vektor kamenu
       if(!newStones.empty()){
-        possibleMove = oldBoard; // Inicializace vychozihi desky
+        possibleMove = oldBoard; // Inicializace vychozi deskou
         newStones.push_back(std::make_pair(X,Y)); // Pridani pokladaneho kamene do vektoru
         for(const TCord& i : newStones) // Umisteni kamenu na desku
           possibleMove.putStone(i.first, i.second, playerColor);
@@ -102,7 +107,7 @@ int evaluate(const Board& board){
           whiteScore++;
       }
     }
-    return curPlayer == BLACK ? blackScore - whiteScore : whiteScore - blackScore;
+    return whiteScore - blackScore;
 }
 
 
