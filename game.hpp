@@ -27,6 +27,7 @@ class Game{
     void execTurnAI(); /* Provedeni tahu pocitace */
     bool onTurnAI(); /* Vrati typ inteligence na tahu - HUMAN | AI */
     TAI  getAIType(void){return AIType;} /* Vraci verzi umele inteligence */
+    void setOpponentType(TPlayer p){playerWhite = p;};
     TColor onTurnColor()const{ return(playerColor); }; /* Zjisti jaky hrac je tahu */
     int saveGame(QString fileName); /* Ulozi rozehranou hru */
     QByteArray loadGame(QString fileName); /* Nacte hru ze souboru */

@@ -214,11 +214,14 @@ void GuiWindow::game(QByteArray save)
     clearLayout();
 
     boardArea = new GuiBoardArea(boardSize, HUMAN, pve? AI: HUMAN, static_cast<TAI>(ai));
-    if(!save.isEmpty()) // Vykonavanie nacitanych tahov z ulozenej hry
+    if(!save.isEmpty()){ // Vykonavanie nacitanych tahov z ulozenej hry
+        boardArea->game.setOpponentType(HUMAN);
         for(int i = 2; i < save.length(); i++){
             //std::cout << "Vykonavam tah c. " << i-1 << ": x = " << save.at(i)/16-1 << ", y = " << save.at(i)%16-1 << std::endl;
             boardArea->game.execTurnHuman(static_cast<uchar>(save.at(i))/16-1, static_cast<uchar>(save.at(i))%16-1);
         }
+        boardArea->game.setOpponentType(pve? AI: HUMAN);
+    }
 
     // Pridat tlacidlo na historiu apod.
 
@@ -233,6 +236,14 @@ void GuiWindow::game(QByteArray save)
     histBackButtonFont.setPointSize(histBackButtonFont.pointSize()*1.5);
     histBackButton->setFont(histBackButtonFont);
     histBackButton->setText(tr("◄")); // ◄ ←
+    QLabel *histLabel = new QLabel(tr("History"));
+    QFont histLabelFont = histLabel->font();
+    //histLabelFont.setWeight(QFont::Bold);
+    histLabelFont.setPointSize(histLabelFont.pointSize()*2);
+    histLabelFont.setFamily("Rockwell");
+    histLabel->setFont(histLabelFont);
+    //newGameMenuLabel->setScaledContents(true);
+    histLabel->setAlignment(Qt::AlignCenter);
     QPushButton *histForwButton = new QPushButton;
     QFont histForwButtonFont = histForwButton->font();
     histForwButtonFont.setPointSize(histForwButtonFont.pointSize()*1.5);
@@ -249,10 +260,11 @@ void GuiWindow::game(QByteArray save)
 
     // Grid layout - konecne nieco ine nez Vertical Box
     QGridLayout *gameLayout = new QGridLayout;
-    gameLayout->addWidget(boardArea, 0, 0, 5, 5);
-    gameLayout->addWidget(histBackButton, 5, 0, 1, 1);
-    gameLayout->addWidget(histForwButton, 5, 1, 1, 1);
-    gameLayout->addWidget(saveGameButton, 5, 4, 1, 1);
+    gameLayout->addWidget(boardArea, 0, 0, 7, 7);
+    gameLayout->addWidget(histBackButton, 7, 0, 1, 1);
+    gameLayout->addWidget(histLabel, 7, 1, 1, 1);
+    gameLayout->addWidget(histForwButton, 7, 2, 1, 1);
+    gameLayout->addWidget(saveGameButton, 7, 5, 1, 2);
     gameInitialized = true;
     setLayout(gameLayout);
 }

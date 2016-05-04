@@ -6,6 +6,7 @@ TARGET = hra2016-cli
 CONFIG += console
 CONFIG -= app_bundle
 RESOURCES = hra2016-cli.qrc
+DEFINES += OTH_USE_GUI
 
 TEMPLATE = app
 

@@ -12,9 +12,9 @@ GuiBoardArea::GuiBoardArea(int X, TPlayer A, TPlayer B, TAI AI, QWidget *parent)
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
-    int id = QFontDatabase::addApplicationFont(":/res/rockwell.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id).at(0);
-    QFont rockwell(family);
+    QFontDatabase::addApplicationFont(":/res/rockwell.ttf");
+    //QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    //QFont rockwell(family);
 
     QFont f = this->font();
     f.setFamily("Rockwell");
@@ -126,15 +126,33 @@ void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
     // Vykreslenie kamenov v hracom poli
     for (int x = 0; x < boardSize; x++) {
         for (int y = 0; y < boardSize; y++) {
+            TColor c = game.board.getStone(x, y);
+            if(c == NONE)
+                continue;
+
             painter.save();
             painter.translate(x*fieldSize, y*fieldSize);
-            if(game.board.getStone(x, y)){
-                QBrush b = setStoneType(game.board.getStone(x, y));
-                if(game.board.getStone(x, y) == MARKSTONE)
-                    b.setStyle(Qt::NoBrush);
-                painter.setBrush(b);
-                painter.drawEllipse(rect);
+            QBrush b = painter.brush();
+            QPen p = painter.pen();
+            if(c == MARKSTONE){
+                if(game.onTurnColor() == BLACK)
+                    p.setColor(Qt::black);
+                else
+                    p.setColor(Qt::lightGray);
+                p.setStyle(Qt::DotLine);
+                b.setStyle(Qt::NoBrush);
             }
+            else{
+                if(c == BLACK)
+                    p.setColor(Qt::black);
+                else
+                    p.setColor(Qt::darkGray);
+                p.setStyle(Qt::SolidLine);
+                b = setStoneType(c);
+            }
+            painter.setBrush(b);
+            painter.setPen(p);
+            painter.drawEllipse(rect);
             painter.restore();
         }
     }

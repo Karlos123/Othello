@@ -7,7 +7,7 @@
 #include <iostream>
 
 
-const int MaxDepth = 4; /**< Maximalni hloubka prohledavani */
+const int MaxDepth = 8; /**< Maximalni hloubka prohledavani */
 
 // Globalni promenne slouzici k optimalizaci
 int size; /**< velikost herniho planu - optimalizace */

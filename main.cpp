@@ -10,7 +10,6 @@
 #include "game.hpp"
 #include "guiwindow.hpp"
 
-#define OTH_GUI_TEST
 
 /* Vytiskne popis hry */
 void printDescription(){
@@ -63,18 +62,21 @@ bool loadCin(int& X, int& Y){
 }
 
 /* MAIN */
+#ifdef OTH_USE_GUI
 int main(int argc, char *argv[])
 {
-  #ifdef OTH_GUI_TEST
-  std::cout << "Use GUI? Type y/Y if yes, any other character if not." << std::endl;
-            if(tolower(getchar()) == 'y'){
+
+  //std::cout << "Use GUI? Type y/Y if yes, any other character if not." << std::endl;
+  //          if(tolower(getchar()) == 'y'){
     QApplication a(argc, argv);
     GuiWindow w;
     w.show();
 
     return a.exec();
-  }
-  #endif
+  //}
+
+  #else
+int main(){
 
   int X, Y;
 
@@ -108,4 +110,5 @@ int main(int argc, char *argv[])
   }
   std::cout << "END" << std::endl;
    return 1;
+  #endif
 }
