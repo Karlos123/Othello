@@ -1,6 +1,7 @@
-//#include <QCoreApplication>
-//#include <QTextStream>
-#include <QApplication>
+#ifdef OTH_USE_GUI
+    #include <QApplication>
+    #include "guiwindow.hpp"
+#endif
 #include <iostream>
 #include <iomanip>
 #include <limits>
@@ -8,7 +9,6 @@
 #include <string>
 #include <regex>
 #include "game.hpp"
-#include "guiwindow.hpp"
 
 
 /* Vytiskne popis hry */
@@ -65,16 +65,11 @@ bool loadCin(int& X, int& Y){
 #ifdef OTH_USE_GUI
 int main(int argc, char *argv[])
 {
-
-  //std::cout << "Use GUI? Type y/Y if yes, any other character if not." << std::endl;
-  //          if(tolower(getchar()) == 'y'){
     QApplication a(argc, argv);
     GuiWindow w;
     w.show();
 
     return a.exec();
-  //}
-
   #else
 int main(){
 
