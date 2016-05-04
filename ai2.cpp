@@ -7,7 +7,7 @@
 #include <iostream>
 
 
-const int MaxDepth = 8; /**< Maximalni hloubka prohledavani */
+const int MaxDepth = 4; /**< Maximalni hloubka prohledavani */
 
 // Globalni promenne slouzici k optimalizaci
 int size; /**< velikost herniho planu - optimalizace */
@@ -49,6 +49,58 @@ TCordVec findNewVec(const Board& oldBoard, const int X, const int Y, const int d
   }
   return {}; // Vyhledavani skoncilo mimo herni plan
 }
+
+bool findAnyMove(const Board& board, const int X, const int Y, const int dirX, const int dirY, TColor player){
+  if(board.getStone(X,Y) != NONE)
+    return false;
+  int i = X+dirX;
+  int j = Y+dirY;
+  TColor rival = player == BLACK ? WHITE : BLACK; /**< Soupeova barva */
+
+  // Prohledavej herni pole
+  while(board.inRange(i,j)){
+    // Kamen na pozici neni souperuv
+    if(board.getStone(i,j) != rival){
+      // Kamen je hrace na tahu = OK
+      if(board.getStone(i,j) == player)
+        return true;
+      else
+        return false;
+    }
+    i+=dirX;
+    j+=dirY;
+  }
+  return false; // Vyhledavani skoncilo mimo herni plan
+}
+
+/**
+ * Zjisti jestli nastal konec
+ * @param  board [description]
+ * @return       [description]
+ */
+bool isEnd(const Board& board){
+  // Prohledavani celeho herni desky
+  for (int X = 0; X < size; X++) {
+    for (int Y = 0; Y < size; Y++) {
+      // Na policku je kamen
+      if(board.getStone(X, Y) != NONE)
+        continue;
+      // Prohledavani okoli kamene na pozici i,j
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          if(i%3-1 == 0 && j%3-1 == 0) // Pozice kamene + smery prohledavani je 0 a 0
+            continue;
+            if(findAnyMove(board, X, Y, i%3-1, j%3-1, WHITE))
+              return false;
+            if(findAnyMove(board, X, Y, i%3-1, j%3-1, BLACK))
+              return false;
+          }
+        }
+      }
+    }
+    return true;
+  }
+
 
 /**
  * @breif Nalezeni vsech moznych tahu
@@ -107,6 +159,8 @@ int evaluate(const Board& board){
           whiteScore++;
       }
     }
+    if(blackScore == 0)
+      return std::numeric_limits<int>::max();
     return whiteScore - blackScore;
 }
 
@@ -144,7 +198,7 @@ bool canTurn(const Board& board, TColor player){
  */
 int minimax(const Board& board, int depth, int a, int b, bool max){
     // Dosazeno max hloubky = ohodnoceni stavu
-    if (depth == 0 || (max ? !canTurn(board, WHITE) : !canTurn(board, BLACK)))
+    if (depth == 0 || (!canTurn(board, WHITE) &&  !canTurn(board, BLACK)))
         return evaluate(board);
     // Generovani dalsich moznych stavu
     std::vector<Board> possibleMoves;
