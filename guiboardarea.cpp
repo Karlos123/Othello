@@ -67,6 +67,7 @@ void GuiBoardArea::mousePressEvent(QMouseEvent *event)
             if(game.onTurnAI() == HUMAN && !game.execTurnHuman(x, y)){ // game.onTurnAI by v tomto bode malo vzdy vraciat HUMAN
                 invalidField = (x+1) * 16 + y + 1;
                 repaint();
+                QThread::msleep(150);
                 invalidField = 0;
                 repaint();
                 return;
