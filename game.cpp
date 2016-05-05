@@ -23,18 +23,15 @@ void Game::nextTurn(){
  * @return bool  Uspesne | neuspesne polozeni kamene/u
  */
 bool Game::execTurnHuman(int X, int Y){
-  Board nextBoard{board.getSize()}; /**< Nove rozlozeni kameu */
-
   try{
     gameLogic.init(X,Y, playerColor); // Inicializace herni logiky pro tah
     gameLogic.checkPos(board); // Kontrola jestli je policko vubec dostupne
     gameLogic.cleanBoard(board); // Vycisteni od predchozich znacek
-    gameLogic.nextState(board, nextBoard); // Vygeneruje dalsi tah
+    gameLogic.nextState(board); // Vygeneruje dalsi tah
   }
   catch(...){
     return false;
   }
-  board = nextBoard; // Aktualizace desky
   gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK); // Nastaveni prohledavani pro dalshio hrace
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
@@ -50,16 +47,14 @@ bool Game::execTurnHuman(int X, int Y){
  * @breig Kameny umisti umela inteligence
  */
 void Game::execTurnAI(){
-  Board nextBoard{board.getSize()}; /**< Nove rozlozeni kameu */
   TAI AI = getAIType(); /**< Typ vyhodnocovaci logiky */
   gameLogic.cleanBoard(board); // Vycisteni desky
   switch (AI) {
-    case AI_AB: ai2NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci alpa-beta
-    case AI_SIMPLE: ai1NextState(board, nextBoard, playerColor); break; // Generovani tahu pomoci SIMPLE algoritmu
+    case AI_EASY: ai2NextState(board, playerColor); break; // Generovani tahu pomoci alpa-beta
+    case AI_DIFFICULT: ai1NextState(board, playerColor); break; // Generovani tahu pomoci SIMPLE algoritmu
     default: throw  std::invalid_argument("Nezname nastaveni umele inteligence");
   }
   gameLogic.init(0, 0, playerColor ==  BLACK ? WHITE : BLACK ); // Nastaveni prohledavani pro dalshio hrace
-  board = nextBoard; // Aktualizace desky
   if(gameLogic.canTurn(board)) // Muze protivnik tahnout kamene?
     nextTurn();
   gameLogic.init(0, 0, playerColor); // Nastaveni prohledavani pro dalshio hrace

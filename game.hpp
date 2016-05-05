@@ -34,7 +34,7 @@ class Game{
     /* Nastavi hru */
     void setState(const TState &state) {board = state.board; playerColor = state.playerColor; blackScore = state.blackScore; whiteScore = state.whiteScore;};
     int getScore(TColor player){return player == BLACK ? blackScore : whiteScore;}; /* Vrati skore hrace */
-    Game(int X, TPlayer A, TPlayer B, TAI AI) : board(X), history(board) {playerBlack = A; playerWhite = B; AIType = AI;};
+    Game(int X, TPlayer A, TPlayer B, TAI AI) : board(X), history(board) {playerBlack = A; playerWhite = B; AIType = AI; std::srand(time(0));};
 };
 
 #endif // GAME_HPP

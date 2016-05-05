@@ -19,7 +19,7 @@ typedef std::vector<std::vector<TColor>> TStones;
 typedef enum {HUMAN, AI} TPlayer;
 
 // Typ umele inteligence
-typedef enum {AI_AB, AI_SIMPLE} TAI;
+typedef enum {AI_EASY, AI_DIFFICULT} TAI;
 
 
 #endif // TYPES_HPP

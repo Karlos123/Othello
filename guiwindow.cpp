@@ -128,8 +128,8 @@ void GuiWindow::newGame()
 
     // ComboBox na vyber typu AI + popis
     aiSelectComboBox = new QComboBox;
-    aiSelectComboBox->addItem(tr("AI 1 (easy)"), AI_SIMPLE);
-    aiSelectComboBox->addItem(tr("AI 2 (difficult)"), AI_AB);
+    aiSelectComboBox->addItem(tr("AI 1 (easy)"), AI_EASY);
+    aiSelectComboBox->addItem(tr("AI 2 (difficult)"), AI_DIFFICULT);
     aiSelectComboBox->setMinimumHeight(aiSelectComboBox->height()*0.05);
     aiSelectLabel = new QLabel(tr("AI:"));
     aiSelectLabel->setBuddy(aiSelectComboBox);

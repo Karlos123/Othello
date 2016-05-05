@@ -2,30 +2,33 @@
 #include "types.hpp"
 #include <iostream>
 
+
+TColor rivalColorAI_1, playerColorAI_1;
+
 /**
  * @breif  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych
  * moznych kamenu pro hrace playerColor a vrati vector souradnic novych kamenu
- * @param  oldBoard Vychozi deska
+ * @param  board  Vychozi deska
  * @param  dirX     Smer prohledavani v ose x (radek)
  * @param  dirY     Smer prohledavani v ose y (sloupec)
  * @param  playerColor Barva hrace na tahu
  * @return          Vektor souradnic X,Y novych kamenu aktulaniho hrace
  */
-TCordVec getPossibleStones(const Board& oldBoard, const int X, const int Y, const int dirX, const int dirY, TColor playerColor){
+TCordVec getPossibleStones(const Board& board, const int X, const int Y, const int dirX, const int dirY){
+  //Policko neni prazdne
+  if(board.getStone(X,Y) != NONE)
+    return {};
+
   int i = X+dirX;
   int j = Y+dirY;
   TCordVec newStones{}; /**< Vector novych kamenu hrace ktery je na tahu */
-  TColor rivalColor = playerColor == BLACK ? WHITE : BLACK; /**< Soupeova barva */
 
-  //Policko neni prazdne
-  if(oldBoard.getStone(X,Y) != NONE)
-    return {};
   // Prohledavej herni pole
-  while(oldBoard.inRange(i,j)){
+  while(board.inRange(i,j)){
     // Kamen na pozici neni souperuv a policko je prazdne
-    if(oldBoard.getStone(i,j) != rivalColor){
+    if(board.getStone(i,j) != rivalColorAI_1){
       // Kamen je hrace na tahu = OK
-      if(oldBoard.getStone(i,j) == playerColor)
+      if(board.getStone(i,j) == playerColorAI_1)
         return newStones;
       else{
         return {};
@@ -44,9 +47,12 @@ TCordVec getPossibleStones(const Board& oldBoard, const int X, const int Y, cons
  * @param nextBoard   Nova herni deska
  * @param playerColor Hrac na tahu
  */
-void ai1NextState(const Board& oldBoard, Board& newBoard, const TColor playerColor){
+void ai1NextState(Board& board, const TColor playerColor){
   TCordVec bestMove{}, tmp{}, tmpv{};
-  int size = oldBoard.getSize();
+  int size = board.getSize();
+  playerColorAI_1 = playerColor;
+  rivalColorAI_1 = playerColor == BLACK ? WHITE : BLACK; /**< Soupeova barva */
+
   // Prohledavani celeho herni desky
   for (int X = 0; X < size; X++) {
     for (int Y = 0; Y < size; Y++) {
@@ -55,7 +61,7 @@ void ai1NextState(const Board& oldBoard, Board& newBoard, const TColor playerCol
         for (int j = 0; j < 3; j++) {
           if(i%3-1 == 0 && j%3-1 == 0)
             continue;
-          tmpv = getPossibleStones(oldBoard, X, Y, i%3-1, j%3-1, playerColor);
+          tmpv = getPossibleStones(board, X, Y, i%3-1, j%3-1);
           if(!tmpv.empty())
             tmp.insert(tmp.end(), tmpv.begin(), tmpv.end());
         }
@@ -75,8 +81,7 @@ void ai1NextState(const Board& oldBoard, Board& newBoard, const TColor playerCol
     }
   }
   // Umisteni kamenu na desku pomoci vektoru souradnic
-  newBoard = oldBoard;
   for(TCord i : bestMove){
-    newBoard.putStone(i.first, i.second, playerColor);
+    board.putStone(i.first, i.second, playerColor);
   }
 }

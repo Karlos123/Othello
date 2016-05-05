@@ -12,7 +12,7 @@ class GameLogic{
   public:
     void init(int a, int b, TColor c); /* Inicializace logiky - nastavi souradnice X, Y a barvy kamenu hrace na tahu */
     void checkPos(const Board&) const;  /* Kontroluje jestli je policko v rozsahu a je volne. Jinak vyhodi vyjimku "out_of_range" */
-    void nextState(const Board& oldBoard, Board& newBoard);  /* Vygeneruje dalsi stav hry za pomoci X, Y a playerColor */
+    void nextState(Board& board);  /* Vygeneruje dalsi stav hry za pomoci X, Y a playerColor */
     bool canTurn(Board&); /* Zjisti jestli muze aktulane nastaveny hrac tahnout kamenem */
     void countScore(const Board& board, int& blackScore,int& whiteScore); /* Prepocita aktualni skore */
     void markBoard(Board&); /* Oznaci mozne tahy na desku */
