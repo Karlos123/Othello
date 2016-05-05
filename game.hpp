@@ -4,6 +4,7 @@
 #include <iostream>
 #include <QByteArray>
 #include <QString>
+#include <ctime>
 
 #include "board.hpp"
 #include "types.hpp"

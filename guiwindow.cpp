@@ -216,10 +216,9 @@ void GuiWindow::game(QByteArray save)
     boardArea = new GuiBoardArea(boardSize, HUMAN, pve? AI: HUMAN, static_cast<TAI>(ai));
     if(!save.isEmpty()){ // Vykonavanie nacitanych tahov z ulozenej hry
         boardArea->game.setOpponentType(HUMAN);
-        for(int i = 2; i < save.length(); i++){
-            //std::cout << "Vykonavam tah c. " << i-1 << ": x = " << save.at(i)/16-1 << ", y = " << save.at(i)%16-1 << std::endl;
+        for(int i = 2; i < save.length(); i++)
             boardArea->game.execTurnHuman(static_cast<uchar>(save.at(i))/16-1, static_cast<uchar>(save.at(i))%16-1);
-        }
+            // Mozno ohlasit chybu vykonavania tahov z nacitanej hry?
         boardArea->game.setOpponentType(pve? AI: HUMAN);
     }
 

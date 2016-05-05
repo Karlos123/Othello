@@ -37,9 +37,9 @@ void History::storeState(Board board, TColor playerColor, const int blackScore, 
  * Prevedeni historie na string
  * @return    Historia tahov v podobe retezca
  */
-const std::string History::prepareToStore(){
+const QByteArray History::prepareToStore(){
 
-  std::string res;
+  QByteArray res;
 
   std::list<TState>::iterator iter{states.begin()};
   std::list<TState>::iterator niter{states.begin()};
@@ -51,7 +51,7 @@ const std::string History::prepareToStore(){
       for (int x = 0; x < size; x++) {
           for (int y = 0; y < size; y++){
               if((iter->board.getStone(x, y) == NONE || iter->board.getStone(x, y) == MARKSTONE) && (niter->board.getStone(x, y) == BLACK || niter->board.getStone(x, y) == WHITE)){
-                res += static_cast<char>((x + 1)*16 + y + 1);
+                res += static_cast<unsigned char>((x + 1)*16 + y + 1);
                 breaker = true;
                 break;
               }

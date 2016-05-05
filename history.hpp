@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <list>
+#include <QByteArray>
 #include "board.hpp"
 #include "types.hpp"
 
@@ -17,7 +18,7 @@ class History{
     std::list<TState>::iterator it{states.begin()};
   public:
     void storeState(Board board, TColor playerColor, const int blackScore, const int whiteScore);
-    const std::string prepareToStore();
+    const QByteArray prepareToStore();
     const TState& nextState();
     const TState& prevState();
     History(Board startBoard);

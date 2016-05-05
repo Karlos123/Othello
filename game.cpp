@@ -106,7 +106,7 @@ int Game::saveGame(QString fileName){
 
     // Pridanie postupnosti vykonanych tahov do QByteArray - preiterovat cez historiu
 
-    save.append(QString::fromStdString(history.prepareToStore()));
+    save.append(history.prepareToStore());
 
     QFile file(fileName);
     if(!file.open(QIODevice::WriteOnly))
