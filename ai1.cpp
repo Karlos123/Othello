@@ -78,6 +78,7 @@ void ai1NextState(Board& board, const TColor playerColor){
           bestMove =  tmp;
           bestMove.push_back(std::make_pair(X,Y));
         }
+        
       }
       tmp = {};
     }
