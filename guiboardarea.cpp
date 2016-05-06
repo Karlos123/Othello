@@ -6,21 +6,15 @@
 #include <QFontDatabase>
 #include <iostream>
 
-
-/**
- * @brief Konstruktor vykreslovacej plochy, parametre su rovnake ako tie u konstruktoru hry.
- * @param X Velikost herni desky
- * @param A Logika hrace hrajiciho za cerne kameny
- * @param B Logika hrace hrajiciho za bile kameny
- * @param AI Typ inteligence pocitace (obtiznost)
- * Nastavi zakladne nastavenia vykreslovacej plochy, ako napr. automaticke vykreslovanie pozadia, velkost a typ pisma.
- */
+// Texturu pozadia by bolo zrejme vhodne vlozit sem
 GuiBoardArea::GuiBoardArea(int X, TPlayer A, TPlayer B, TAI AI, QWidget *parent)
     : QWidget(parent), game{X, A, B, AI}
 {
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
     QFontDatabase::addApplicationFont(":/res/rockwell.ttf");
+    //QString family = QFontDatabase::applicationFontFamilies(id).at(0);
+    //QFont rockwell(family);
 
     QFont f = this->font();
     f.setFamily("Rockwell");
@@ -35,13 +29,23 @@ GuiBoardArea::GuiBoardArea(int X, TPlayer A, TPlayer B, TAI AI, QWidget *parent)
     invalidField = 0;
 }
 
-
-/**
- * @brief Nastavi velkost pola pre kamen na zaklade velkosti vykreslovacej plochy.
- * @param event ResizeEvent, na ktory tato metoda reaguje
- */
-void GuiBoardArea::resizeEvent(QResizeEvent * event)
+// Qt bez tejto metody vrieska ako male dieta, nastavenie najmensej velkosti okna
+QSize GuiBoardArea::minimumSizeHint() const
 {
+    return QSize(100, 100);
+}
+
+//
+QSize GuiBoardArea::sizeHint() const
+{
+    return QSize(400, 200);
+}
+
+// Okno sa pri vkladani widgetov do layoutu automaticky resizuje, cize je
+// potrebne takto aktualizovat velkost fieldSize
+void GuiBoardArea::resizeEvent(QResizeEvent * event)
+{   // Tu ani nemusia byt tie event->size(), ale ked je tu ciste len width() tak
+    // prekladac sa stazuje ze je event nepouzity
     if(event->size().width() < event->size().height())
         fieldSize = event->size().width();
     else
@@ -50,10 +54,7 @@ void GuiBoardArea::resizeEvent(QResizeEvent * event)
 }
 
 
-/**
- * @brief Reaguje na stlacenie mysi, cim vykona tah ludskeho hraca. Ak je nasledne za nim na tahu AI, tak vykona svoj tah, resp. svoje tahy.
- * @param event MousePressEvent, na ktory tato metoda reaguje
- */
+// Event reagujuci na stlacenie mysi, vykonava samotnu hru
 void GuiBoardArea::mousePressEvent(QMouseEvent *event)
 {
     if(game.isEnd())
@@ -63,7 +64,7 @@ void GuiBoardArea::mousePressEvent(QMouseEvent *event)
         int x = event->x()/fieldSize; // stlpec (1, 2, ...)
         int y = event->y()/fieldSize; // riadok (a, b, ...)
         if(x < game.board.getSize() && y < game.board.getSize()){
-            if(game.onTurnAI() == HUMAN && !game.execTurnHuman(x, y)){ // Hrac previedol ilegalny tah, vyznaci sa stlacene pole
+            if(game.onTurnAI() == HUMAN && !game.execTurnHuman(x, y)){ // game.onTurnAI by v tomto bode malo vzdy vraciat HUMAN
                 invalidField = (x+1) * 16 + y + 1;
                 repaint();
                 QThread::msleep(150);
@@ -72,7 +73,7 @@ void GuiBoardArea::mousePressEvent(QMouseEvent *event)
                 return;
             }
             repaint();
-            while(game.onTurnAI() == AI && !game.isEnd()){ // Vykonavaju sa tahy AI
+            while(game.onTurnAI() == AI && !game.isEnd()){
                 game.execTurnAI();
                 QThread::msleep(500);
                 repaint();
@@ -82,12 +83,8 @@ void GuiBoardArea::mousePressEvent(QMouseEvent *event)
 }
 
 
-/**
- * @brief Vytvori gradient na kamen, ktory sa aktualne vykresluje.
- * @param player Hrac, ktory je na tahu
- * @param fSize Velkost pola, specifikuje sa pre vykreslenie kamenov vedla hracej plochy
- * Vytvori radialny gradient pre vykreslovany kamen podla toho, ktory hrac je na tahu.
- */
+// Vrati gradient na kamen hraca player, fSize je volitelny parameter pouzivany
+// pre vykreslenie kamenov v GUI vedla hracej plochy
 QRadialGradient GuiBoardArea::setStoneType(TColor player, int fSize)
 {
     if(!fSize)
@@ -113,23 +110,18 @@ QRadialGradient GuiBoardArea::setStoneType(TColor player, int fSize)
 }
 
 
-/**
- * @brief Prekreslovanie plochy hracej dosky a skore. Vykonava sa pri kazdej zmene hracej dosky.
- */
-void GuiBoardArea::paintEvent(QPaintEvent *)
+// Metoda, ktora vykresluje hraciu plochu
+void GuiBoardArea::paintEvent(QPaintEvent * /* event */)
 {
-    // Zakladne nastavenie plochy pre vykreslovanie
     int boardSize = game.board.getSize();
-    int gridOffset = ((width() > height() ? height() : width()) - fieldSize*boardSize)/2;
     QPainter painter(this);
-    painter.translate(gridOffset, gridOffset);  // Posunutie od laveho horneho rohu, esteticka zalezitost
+    int gridOffset = ((width() > height() ? height() : width()) - fieldSize*boardSize)/2;
+    painter.translate(gridOffset, gridOffset);  // Posunutie od laveho horneho rohu, lepsie to potom vyzera
     painter.setRenderHint(QPainter::Antialiasing, true);
-
-    // Vyplnenie hracej dosky zelenou farbou na pozadi
     painter.setBrush(QBrush(Qt::darkGreen, Qt::SolidPattern));
     painter.drawRect(QRect(0, 0, fieldSize*boardSize, fieldSize*boardSize));
 
-    // Obdlznik (vlastne stvorec), podla ktoreho sa budu vykreslovat kamene
+    // Obdlznik (vlastne stvorec) podla ktoreho sa spravi kamen
     QRect rect(fieldSize/8, fieldSize/8, fieldSize*3/4, fieldSize*3/4);
 
     // Vykreslenie kamenov v hracom poli
@@ -166,12 +158,11 @@ void GuiBoardArea::paintEvent(QPaintEvent *)
         }
     }
 
-    // Vykreslenie informacii o hre vedla hracej plochy
+    // Rendering informacii o hre vedla hracej plochy
     painter.save();
     painter.translate(boardSize*fieldSize, 0);
     int fSize = fieldSize*boardSize/8; // pouzivany ako default velkost kamenov, ktore sa vykresluju vedla hracej plochy
 
-    // Nastavenie pisma pre vypis informacii
     QFont font = painter.font();
     font.setPointSize(8);
     font.setPointSizeF(8.25);
@@ -218,7 +209,8 @@ void GuiBoardArea::paintEvent(QPaintEvent *)
     painter.drawLine(0, fieldSize*boardSize/2, fieldSize*boardSize, fieldSize*boardSize/2);
     painter.drawLine(fieldSize*boardSize/2, 0, fieldSize*boardSize/2, fieldSize*boardSize);
 
-    // Vykreslenie "Game Over" screen - netvori sa nove okno, len sa hracia plocha prekryje a vykresli sa okienko
+    // Vykreslenie "Game Over" screen - netvori sa nove okno, len sa proste hracia
+    // plocha prekryje a vyrenderuje sa okienko
     if(game.isEnd()){
         // Prekrytie plochy sivou clonou
         painter.setBrush(QBrush(Qt::black, Qt::SolidPattern));
