@@ -2,14 +2,18 @@
 #include <iostream>
 #include <iomanip>
 
-
+/**
+ * @breif Incializace velikosti herni desky a konstrukce herni desky.
+ * @param X pozadovana velikost herni desky.
+ */
 Board::Board(int x){
   size = x;
   construct(x);
 }
 
 /**
- * @breif Tisk hraciho desky do konzole
+ * @breif Tisk herni desky do konzole. Bile kameny jsou reprezentovany zavinacem, cerne velkym pismenem "O" a mozne tahy vykricnikem.
+ * Deska je ve vodorovnem smeru znacena cisly od 1 a ve vertikalnim smeru je znacena od pismene "a".
  */
 void Board::print() const {
   // Tisk horniho ocislovani hraciho pole
@@ -50,7 +54,8 @@ void Board::print() const {
 }
 
 /**
- * Vytvori ctvercovou hraci desku o zadane velikost
+ * @breif Vytvori ctvercovou hraci desku o zadane velikost, reprezetovanou vektorem vektoru a inicializuje ji do vychoziho stavu.
+ * @note Vychozi stav zahrnuje dva kameny bile, dva cerne a ctyri pseudo kameny MARKSTONE.
  * @param size Pozadovana velikost desky
  */
 void Board::construct(int size){
@@ -72,10 +77,10 @@ void Board::construct(int size){
 }
 
 /**
- * @breif Zjisti jestli jsou souradnice v rozmezi desky
- * @param  X Souradnice Xs
+ * @breif Zjisti jestli jsou predane souradnice v rozmezi desky
+ * @param  X Souradnice X
  * @param  Y Souradnice Y
- * @return   bool True jestli je v rozmezi
+ * @return   True kdyz jsou souradnice v rozmezi herni desky. Jinak false
  */
 bool Board::inRange(const int X, const int Y) const{
   return(X >= 0 && Y >= 0 && X <= size-1 && Y <= size-1);

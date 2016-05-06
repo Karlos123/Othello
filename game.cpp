@@ -18,9 +18,8 @@ void Game::nextTurn(){
  * @breif Pokusi se provest tah ze souradnic X a Y zadanych clovekem
  * @param  X     Uzivatelem zadana souradnice X (radek)
  * @param  Y     Uzivatelem zadana souradnice Y (sloupec)
- * @param  board Aktulani hraci deska
  * @param  color Barva kamene/hrace na tahu
- * @return bool  Uspesne | neuspesne polozeni kamene/u
+ * @return       True Uspesne | False neuspesne polozeni kamene/u
  */
 bool Game::execTurnHuman(int X, int Y){
   try{
@@ -44,7 +43,8 @@ bool Game::execTurnHuman(int X, int Y){
 }
 
 /**
- * @breig Kameny umisti umela inteligence
+ * @breif Provedeni tahu umelou inteligenci.
+ * @note Vyzaduje nastaveni obtiznosti umele inteligence (TAI AIType).
  */
 void Game::execTurnAI(){
   TAI AI = getAIType(); /**< Typ vyhodnocovaci logiky */
@@ -65,8 +65,8 @@ void Game::execTurnAI(){
 }
 
 /**
- * @breif Projde herni desku od pro oba hrace a zjsiti jestli z nich alespon jeden muze hrat
- * @return bool True kdyz je mozny nejaky pohyb. False jinak
+ * @breif Projde herni desku od pro oba hrace a zjsiti jestli alespon jeden muze jeste polozit kamen
+ * @return True pri konci hry. Jinak false
  */
 bool Game::isEnd(){
   gameLogic.init(0,0, playerColor);
@@ -81,7 +81,7 @@ bool Game::isEnd(){
 }
 
 /**
- * Vyhodnoti jestli je nahu clovek nebo pocitac
+ * @breif Vyhodnoti jestli je nahu clovek nebo pocitac
  * @return clovek | pocitac (AI)
  */
 bool Game::onTurnAI(){
@@ -93,8 +93,9 @@ bool Game::onTurnAI(){
 }
 
 /**
- * Ulozi rozehranu hru do suboru s nazvem FileName
- * @return 0 ak sa operace vydarila, nenulova hodnota v pripade chyby
+ * @breif Ulozi rozehranou hru do suboru s nazvem FileName
+ * @param fileName Nazev souboru, do ktereho bude hra ulozena
+ * @return 0 kdyz sa operace vydarila, nenulova hodnota v pripade chyby
  */
 int Game::saveGame(QString fileName){
     QByteArray save;
@@ -119,7 +120,7 @@ int Game::saveGame(QString fileName){
 }
 
 /**
- * Nacita rozehranu hru ze souboru s nazvem FileName
+ * @breif Nacita rozehranu hru ze souboru s nazvem FileName
  * @return bajtove pole ulozene hry jestli sa operace vydarila, prazdne bajtove pole v pripade chyby
  */
 QByteArray Game::loadGame(QString fileName){

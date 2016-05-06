@@ -3,7 +3,8 @@
 #include <iostream>
 
 
-TColor rivalColorAI_1, playerColorAI_1;
+TColor rivalColorAI_1; /**< Protihracova barva kamenu slouzici jen k optimalizaci */
+TColor playerColorAI_1; /**< Barva kamenu hrace na tahu slouzici jen k optimalizaci */ 
 
 /**
  * @breif  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych

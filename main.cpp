@@ -1,6 +1,6 @@
 #ifdef OTH_USE_GUI
-    #include <QApplication>
-    #include "guiwindow.hpp"
+#include <QApplication>
+#include "guiwindow.hpp"
 #endif
 #include <iostream>
 #include <iomanip>
@@ -11,7 +11,9 @@
 #include "game.hpp"
 
 
-/* Vytiskne popis hry */
+/**
+ * @breif Vypise popis hry pro hru v CLI
+ */
 void printDescription(){
   std::cout << "  * Board 8x8" << std::endl
             << "  * Player vs. computer" << std::endl
@@ -21,7 +23,9 @@ void printDescription(){
             << "  * ! .. Possible move" << std::endl;
 }
 
-/* Vytiskne ovladani hry */
+/**
+ * @breif Vypise ovladani hry v mode CLI
+ */
 void printControl(){
   std::cout << "  * Type coordinates to to place the stone" << std::endl
             << "  * Exceptable coordinate patterns:" << std::endl
@@ -31,7 +35,12 @@ void printControl(){
             << "  * To quit the qame type \"q\"" << std::endl;
 }
 
-/* Nacte X, Y nebo provede prikaz z prikazove radky */
+/**
+ * @breif Nacte a prevede souradnice X, Y ze vstupu nebo nacte prikaz,
+ * @param  X Souradnice X
+ * @param  Y Souradnice Y
+ * @return True kdyz se povedlo prevest souradnice, nacist prikaz. Jinak false
+ */
 bool loadCin(int& X, int& Y){
   std::string cmdLine;
   std::smatch matches;
@@ -61,7 +70,10 @@ bool loadCin(int& X, int& Y){
   return true;
 }
 
-/* MAIN */
+/**
+ * @breif Hlavni ridici struktura programu
+ * @note V pripade ze je definovano uzivatelske rozhrani (GUI) spusti hru za pomoci QWidgets, jinak probiha hra v terminalu | prikazove radce.
+ */
 #ifdef OTH_USE_GUI
 int main(int argc, char *argv[])
 {

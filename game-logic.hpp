@@ -4,7 +4,15 @@
 #include "board.hpp"
 #include "types.hpp"
 
-
+/**
+ * @Class GameLogic
+ *
+ * @breif Herni logika hry starajici se o logicke operace nad hernim planem.
+ *
+ * Herni logika poskytuje funkce tykajici se posunu kamenu na herni desce, generovani dalsiho rozlozeni kamenu pro hru hrac vs hrac a hrac vs pocitac.
+ * Pred provadenim jakyvkoliv zmen je nutna inicilizace vychozich souradnic X, Y a barvy hrace pro ktereho se budou jednotlive funkce provadet.
+ * Nektere funkce, ktere poskytuje trida GameLogic nevyzaduji inicializaci vsech promennych (napr.: markBoard).
+ */
 class GameLogic{
     int X, Y; /**< Souradnice vstupniho kamene */
     TColor playerColor; /**< Barva kamenu hrace na tahu na tahu */
