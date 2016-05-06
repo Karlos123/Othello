@@ -14,7 +14,7 @@
 /**
  * @class Game
  *
- * @breif Stara se o hru jako takovou.
+ * @brief Stara se o hru jako takovou.
  *
  * Trida uchovava  veskere auktualni informace o hre: barvu kamenu hrace na tahu, skore hracu, typ hracu (clovek, pocitac) a v pripade hry proti pocitaci i
  * nastaveni obtiznosti hry (AIType). Trida se predevsim stara o chod hry, vestinu logickych operaci a ukonu prenechava herni logicice se kterou je uzce
@@ -37,7 +37,7 @@ class Game{
     bool isEnd(void); /* Zjisti jestli nastal konec hry */
 
     /**
-     * @breif Vyhodnoti jestli se jedna o hru hrac vs pocitac nebo hrac vs hrac
+     * @brief Vyhodnoti jestli se jedna o hru hrac vs pocitac nebo hrac vs hrac
      * @return True Kdyz se jedna o hru hrace proti pocitaci. JIank false
      */
     bool isPvEGame() {return(playerWhite == AI);};
@@ -51,13 +51,13 @@ class Game{
     TAI  getAIType(void){return AIType;} /* Vraci verzi umele inteligence */
 
     /**
-     * @breif Nastaveni logiky hrace bily.
+     * @brief Nastaveni logiky hrace bily.
      * @param p Logika hrace bily (HUMAN | AI)
      */
     void setOpponentType(TPlayer p){playerWhite = p;};
 
     /**
-     * @breif Zjisti barvu kamenu hracee na tahu
+     * @brief Zjisti barvu kamenu hracee na tahu
      * @return Barva kamenu hrace na tahu
      */
     TColor onTurnColor()const{ return(playerColor); };
@@ -67,20 +67,20 @@ class Game{
     QByteArray loadGame(QString fileName); /* Nacte hru ze souboru */
 
     /**
-     * @breif Nastaveni hernich promennych herni deska, hrac na tahu, skore hrace za cerne a bile kameny ze stavu ulozenoh v historii hry.
+     * @brief Nastaveni hernich promennych herni deska, hrac na tahu, skore hrace za cerne a bile kameny ze stavu ulozenoh v historii hry.
      * @param state Ulozeny stav z historie
      */
     void setState(const TState &state) {board = state.board; playerColor = state.playerColor; blackScore = state.blackScore; whiteScore = state.whiteScore;};
 
     /**
-     * @breif Vrati skore hrace specifikovaneho v parametru player
+     * @brief Vrati skore hrace specifikovaneho v parametru player
      * @param  player Hrac u ktereho pozadujeme skro
      * @return        Skore hrace
      */
     int getScore(TColor player){return player == BLACK ? blackScore : whiteScore;}; /* Vrati skore hrace */
 
     /**
-     * @breif Konstruktor hry, kteruy inicializuje herni desku, logiku hry, historii. Dale nastavuje tridni promenne.
+     * @brief Konstruktor hry, kteruy inicializuje herni desku, logiku hry, historii. Dale nastavuje tridni promenne.
      * @param X Velikost herni desky
      * @param A Logika hrace hrajiciho za cerne kameny
      * @param B Logika hrace hrajiciho za bile kameny

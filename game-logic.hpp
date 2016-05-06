@@ -7,7 +7,7 @@
 /**
  * @Class GameLogic
  *
- * @breif Herni logika hry starajici se o logicke operace nad hernim planem.
+ * @brief Herni logika hry starajici se o logicke operace nad hernim planem.
  *
  * Herni logika poskytuje funkce tykajici se posunu kamenu na herni desce, generovani dalsiho rozlozeni kamenu pro hru hrac vs hrac a hrac vs pocitac.
  * Pred provadenim jakyvkoliv zmen je nutna inicilizace vychozich souradnic X, Y a barvy hrace pro ktereho se budou jednotlive funkce provadet.

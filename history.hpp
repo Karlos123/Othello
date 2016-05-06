@@ -10,7 +10,7 @@
 /**
  * @struct TState
  *
- * @breif Struktura slouzici k ulozeni stavu hry
+ * @brief Struktura slouzici k ulozeni stavu hry
  */
 typedef struct{
   Board board; /**< Herni deska, pred provedenim tahu */
@@ -22,7 +22,7 @@ typedef struct{
 /**
  * @class History
  *
- * @breif Posloupnost tahu a stavu provedenych ve hre
+ * @brief Posloupnost tahu a stavu provedenych ve hre
  *
  * Trida uchovava ve dvousmerne vazenamem seznamu stavy hry a poskytuje operace nad historii: ulozeni stavu, posun v historii vpred | vzad a prevadi
  * historie do ulozitelne formy (bytoveho pole).

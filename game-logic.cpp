@@ -7,7 +7,7 @@
 #include <iostream>
 
 /**
- * @breif  Zjisti jestli nastaveny hrac muze jeste tahnout, polozit kamen na nejake pole herniho planu.
+ * @brief  Zjisti jestli nastaveny hrac muze jeste tahnout, polozit kamen na nejake pole herniho planu.
  * @warning Vyzaduje inicializaci herni logiky, jinak nedefinovane chovani.
  * @param  board Prohledavana deska
  * @return bool  True kdyz hrac jeste muze uskutecnit tah. Jinak false
@@ -50,7 +50,7 @@ void GameLogic::init(int a, int b, TColor c){
 }
 
 /**
- * @breif Oznaceni moznych tahu na desce pomoci pseudo kamene MARKSTONE.
+ * @brief Oznaceni moznych tahu na desce pomoci pseudo kamene MARKSTONE.
  * @note Nevyzaduje nastaveni tridnich promennych.
  * @param board Aktualni deska
  */
@@ -77,7 +77,7 @@ void GameLogic::markBoard(Board& board){
 }
 
 /**
- * @breif Odstrani vsechny pseudo kameny MARKSTONE z herni desky
+ * @brief Odstrani vsechny pseudo kameny MARKSTONE z herni desky
  * @note Nevyzaduje nastaveni tridnich promennych.
  * @param board Aktualni deska urcena k odstranei tagu
  */
@@ -92,7 +92,7 @@ void GameLogic::cleanBoard(Board& board){
 }
 
 /**
- * @breif  Prohleda od souradnice X, Y pozice novych kamenu pro aukutalniho hrace (playerColor) a vrati vektor souradnic novych kamenu
+ * @brief  Prohleda od souradnice X, Y pozice novych kamenu pro aukutalniho hrace (playerColor) a vrati vektor souradnic novych kamenu
  * @param  oldBoard Vychozi deska
  * @param  dirX     Smer prohledavani v ose x (radek)
  * @param  dirY     Smer prohledavani v ose y (sloupec)
@@ -123,7 +123,7 @@ TCordVec GameLogic::getNewStones(const Board& oldBoard, const int X, const int Y
 }
 
 /**
- * @breif Kontroluje jestli je nastavena pozice X,Y v rozsahu desky a je  volna
+ * @brief Kontroluje jestli je nastavena pozice X,Y v rozsahu desky a je  volna
  * @param board Hraci deska
  */
 void GameLogic::checkPos(const Board& board) const {
@@ -132,7 +132,7 @@ void GameLogic::checkPos(const Board& board) const {
 }
 
 /**
- * @breif Vygeneruje novy stav herni desky na zaklade X, Y a barvy kamene
+ * @brief Vygeneruje novy stav herni desky na zaklade X, Y a barvy kamene
  * @warning V pripade nemoznosti provedeni tahu vyhodi vyjimiku std::out_of_range
  * @note vyzaduje nastaveni vsech tridnich promennych.
  * @param oldBoard Deska pred polozenim novych kamenu
@@ -161,7 +161,7 @@ void GameLogic::nextState(Board& board){
 }
 
 /**
- * @breif Vypocita skore pro hrace hrajiciho za cerne i bile kameny
+ * @brief Vypocita skore pro hrace hrajiciho za cerne i bile kameny
  * @note Nevyzaduje nastevni tridnich prommenych.
  * @param board      Aktualni deska
  * @param blackScore Refence na skore hrace hrajicho za cerne kameny

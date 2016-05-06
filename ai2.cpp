@@ -9,7 +9,7 @@
 TColor rivalColorAI_2, playerColorAI_2;
 
 /**
- * @breif  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych
+ * @brief  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych
  * moznych kamenu pro hrace playerColor a vrati vector souradnic novych kamenu
  * @param  board  Vychozi deska
  * @param  dirX     Smer prohledavani v ose x (radek)

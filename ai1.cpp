@@ -4,10 +4,10 @@
 
 
 TColor rivalColorAI_1; /**< Protihracova barva kamenu slouzici jen k optimalizaci */
-TColor playerColorAI_1; /**< Barva kamenu hrace na tahu slouzici jen k optimalizaci */ 
+TColor playerColorAI_1; /**< Barva kamenu hrace na tahu slouzici jen k optimalizaci */
 
 /**
- * @breif  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych
+ * @brief  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych
  * moznych kamenu pro hrace playerColor a vrati vector souradnic novych kamenu
  * @param  board  Vychozi deska
  * @param  dirX     Smer prohledavani v ose x (radek)

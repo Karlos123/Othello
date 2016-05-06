@@ -12,7 +12,7 @@
 
 
 /**
- * @breif Vypise popis hry pro hru v CLI
+ * @brief Vypise popis hry pro hru v CLI
  */
 void printDescription(){
   std::cout << "  * Board 8x8" << std::endl
@@ -24,7 +24,7 @@ void printDescription(){
 }
 
 /**
- * @breif Vypise ovladani hry v mode CLI
+ * @brief Vypise ovladani hry v mode CLI
  */
 void printControl(){
   std::cout << "  * Type coordinates to to place the stone" << std::endl
@@ -36,7 +36,7 @@ void printControl(){
 }
 
 /**
- * @breif Nacte a prevede souradnice X, Y ze vstupu nebo nacte prikaz,
+ * @brief Nacte a prevede souradnice X, Y ze vstupu nebo nacte prikaz,
  * @param  X Souradnice X
  * @param  Y Souradnice Y
  * @return True kdyz se povedlo prevest souradnice, nacist prikaz. Jinak false
@@ -71,7 +71,7 @@ bool loadCin(int& X, int& Y){
 }
 
 /**
- * @breif Hlavni ridici struktura programu
+ * @brief Hlavni ridici struktura programu
  * @note V pripade ze je definovano uzivatelske rozhrani (GUI) spusti hru za pomoci QWidgets, jinak probiha hra v terminalu | prikazove radce.
  */
 #ifdef OTH_USE_GUI

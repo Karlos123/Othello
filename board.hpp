@@ -7,7 +7,7 @@
 /**
  * @class Board
  *
- * @breif Herni plan hry Othello-reversi
+ * @brief Herni plan hry Othello-reversi
  *
  * Trida Board poskytuje ctvercovy herni plan a funkce pro praci s nim. Trida neimplemetuje zadne logicke operace nad hernim planem, jako napriklad
  * generovani dalshio stavu hry apod. Herni deska je urcena svoji velikosti a polem hernich kamenu, reprezentovanych vektorem vektoru.
@@ -21,7 +21,7 @@ class Board{
     void print() const; /* Tisk desky do CLI */
 
     /**
-     * @breif Vlozi na pozici X, Y kamen barvy color.
+     * @brief Vlozi na pozici X, Y kamen barvy color.
      * @Warning Nekontroluje meze pole
      * @param X     Souradnice X
      * @param Y     Souradnice Y
@@ -30,7 +30,7 @@ class Board{
     void putStone(int X, int Y, TColor color){ stones[X][Y] = color; };
 
     /**
-     * @breif Vrati barvu kamene na pozici X, Y.
+     * @brief Vrati barvu kamene na pozici X, Y.
      * @Warning Nekontroluje meze pole
      * @param X     Souradnice X
      * @param Y     Souradnice Y
@@ -41,7 +41,7 @@ class Board{
     bool inRange(const int X, const int Y) const; /* Zjisti jestli jsou souradnice v rozmezi desky */
 
     /**
-     * @breif Zjisti jestli je souradnice X, Y dostupna pro polozeni kamene, policko musi byt oznaceno MARKSTONE.
+     * @brief Zjisti jestli je souradnice X, Y dostupna pro polozeni kamene, policko musi byt oznaceno MARKSTONE.
      * @param  X Souradnice X
      * @param  Y  Souradnice Y
      * @return   True jestli je policko dostupne. Jinak false

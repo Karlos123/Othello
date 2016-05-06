@@ -8,14 +8,14 @@
 #include <QFile>
 
 /**
- * @breif Prepne tah na dalsiho hrace. Meni promenou playerColor
+ * @brief Prepne tah na dalsiho hrace. Meni promenou playerColor
  */
 void Game::nextTurn(){
   playerColor = playerColor == BLACK ? WHITE : BLACK;
 }
 
 /**
- * @breif Pokusi se provest tah ze souradnic X a Y zadanych clovekem
+ * @brief Pokusi se provest tah ze souradnic X a Y zadanych clovekem
  * @param  X     Uzivatelem zadana souradnice X (radek)
  * @param  Y     Uzivatelem zadana souradnice Y (sloupec)
  * @param  color Barva kamene/hrace na tahu
@@ -43,7 +43,7 @@ bool Game::execTurnHuman(int X, int Y){
 }
 
 /**
- * @breif Provedeni tahu umelou inteligenci.
+ * @brief Provedeni tahu umelou inteligenci.
  * @note Vyzaduje nastaveni obtiznosti umele inteligence (TAI AIType).
  */
 void Game::execTurnAI(){
@@ -65,7 +65,7 @@ void Game::execTurnAI(){
 }
 
 /**
- * @breif Projde herni desku od pro oba hrace a zjsiti jestli alespon jeden muze jeste polozit kamen
+ * @brief Projde herni desku od pro oba hrace a zjsiti jestli alespon jeden muze jeste polozit kamen
  * @return True pri konci hry. Jinak false
  */
 bool Game::isEnd(){
@@ -81,7 +81,7 @@ bool Game::isEnd(){
 }
 
 /**
- * @breif Vyhodnoti jestli je nahu clovek nebo pocitac
+ * @brief Vyhodnoti jestli je nahu clovek nebo pocitac
  * @return clovek | pocitac (AI)
  */
 bool Game::onTurnAI(){
@@ -93,7 +93,7 @@ bool Game::onTurnAI(){
 }
 
 /**
- * @breif Ulozi rozehranou hru do suboru s nazvem FileName
+ * @brief Ulozi rozehranou hru do suboru s nazvem FileName
  * @param fileName Nazev souboru, do ktereho bude hra ulozena
  * @return 0 kdyz sa operace vydarila, nenulova hodnota v pripade chyby
  */
@@ -120,7 +120,7 @@ int Game::saveGame(QString fileName){
 }
 
 /**
- * @breif Nacita rozehranu hru ze souboru s nazvem FileName
+ * @brief Nacita rozehranu hru ze souboru s nazvem FileName
  * @return bajtove pole ulozene hry jestli sa operace vydarila, prazdne bajtove pole v pripade chyby
  */
 QByteArray Game::loadGame(QString fileName){

@@ -3,7 +3,7 @@
 #include <iomanip>
 
 /**
- * @breif Incializace velikosti herni desky a konstrukce herni desky.
+ * @brief Incializace velikosti herni desky a konstrukce herni desky.
  * @param X pozadovana velikost herni desky.
  */
 Board::Board(int x){
@@ -12,7 +12,7 @@ Board::Board(int x){
 }
 
 /**
- * @breif Tisk herni desky do konzole. Bile kameny jsou reprezentovany zavinacem, cerne velkym pismenem "O" a mozne tahy vykricnikem.
+ * @brief Tisk herni desky do konzole. Bile kameny jsou reprezentovany zavinacem, cerne velkym pismenem "O" a mozne tahy vykricnikem.
  * Deska je ve vodorovnem smeru znacena cisly od 1 a ve vertikalnim smeru je znacena od pismene "a".
  */
 void Board::print() const {
@@ -54,7 +54,7 @@ void Board::print() const {
 }
 
 /**
- * @breif Vytvori ctvercovou hraci desku o zadane velikost, reprezetovanou vektorem vektoru a inicializuje ji do vychoziho stavu.
+ * @brief Vytvori ctvercovou hraci desku o zadane velikost, reprezetovanou vektorem vektoru a inicializuje ji do vychoziho stavu.
  * @note Vychozi stav zahrnuje dva kameny bile, dva cerne a ctyri pseudo kameny MARKSTONE.
  * @param size Pozadovana velikost desky
  */
@@ -77,7 +77,7 @@ void Board::construct(int size){
 }
 
 /**
- * @breif Zjisti jestli jsou predane souradnice v rozmezi desky
+ * @brief Zjisti jestli jsou predane souradnice v rozmezi desky
  * @param  X Souradnice X
  * @param  Y Souradnice Y
  * @return   True kdyz jsou souradnice v rozmezi herni desky. Jinak false

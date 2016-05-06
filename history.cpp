@@ -3,7 +3,7 @@
 
 
 /**
- * @breif Vrati nasledujici stav v historii a posune ukazatel na stav na tento stav.
+ * @brief Vrati nasledujici stav v historii a posune ukazatel na stav na tento stav.
  * @note Kdyz neni dalsiho stavu v historii vrati aktualni stav historie
  * @return Dalsi stav hry
  */
@@ -14,7 +14,7 @@ const TState& History::nextState(){
 }
 
 /**
- * @breif Vrati predchozi stav v historii a posune ukazatel na stav na tento stav.
+ * @brief Vrati predchozi stav v historii a posune ukazatel na stav na tento stav.
  * @note Kdyz neni predchozi stav v historii vrati aktualni stav.
  * @return Predchozi stav hry
  */
@@ -25,7 +25,7 @@ const TState& History::prevState(){
 }
 
 /**
- * @breif Ulozi stav hry do obousmerne vazaneho seznamu historie
+ * @brief Ulozi stav hry do obousmerne vazaneho seznamu historie
  * @note Jestlize se ukazatel stav nenachazi na poslednim stavu (byl proveden alespon jeden posun zpet v historii) odstrani vsechy
  * zaznamy od aktulaniho stavu az po posledni stav v historii z historie.
  * @param board       Aktualni herni deska
@@ -46,7 +46,7 @@ void History::storeState(Board board, TColor playerColor, const int blackScore, 
 
 
 /**
- * @breif Pripravi historii k ulozeni. Prevede stavy z historie na bytove pole.
+ * @brief Pripravi historii k ulozeni. Prevede stavy z historie na bytove pole.
  * @return  Historia tahov v podobe bytoveho pole
  */
 const QByteArray History::prepareToStore(){
@@ -80,7 +80,7 @@ const QByteArray History::prepareToStore(){
 }
 
 /**
- * @breif Konstruktor historie ulozi vychozi stav hry do historie a nastavi ukazatel na stav na tento stav.
+ * @brief Konstruktor historie ulozi vychozi stav hry do historie a nastavi ukazatel na stav na tento stav.
  * @param startBoard Vychozi stav hry
  */
 History::History(Board startBoard){
