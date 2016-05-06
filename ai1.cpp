@@ -72,11 +72,12 @@ void ai1NextState(Board& board, const TColor playerColor){
         bestMove = tmp;
         bestMove.push_back(std::make_pair(X,Y));
       }
-      if(tmp.size() == bestMove.size() && tmp.size() != 0){
+      else if(tmp.size() == bestMove.size() && tmp.size() != 0){
         int random = rand() % 2 ;
-        if(random == 1)
+        if(random == 1){
           bestMove =  tmp;
-        bestMove.push_back(std::make_pair(X,Y));
+          bestMove.push_back(std::make_pair(X,Y));
+        }
       }
       tmp = {};
     }
