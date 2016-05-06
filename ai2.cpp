@@ -2,7 +2,6 @@
 #include "board.hpp"
 
 
-#include <limits>
 #include <cstdlib>
 
 
@@ -10,11 +9,12 @@ TColor rivalColorAI_2, playerColorAI_2;
 
 /**
  * @brief  Prohleda od souradnice X, Y ve smeru dirX, dirY. Funkce vraci pozice novych
- * moznych kamenu pro hrace playerColor a vrati vector souradnic novych kamenu
+ * moznych kamenu pro hrace playerColor a vrati vektor souradnic novych kamenu
  * @param  board  Vychozi deska
+ * @param   X       Souranice X od ktere se bude hledat mozny vektor kamenu
+ * @param   Y       Souranice Y od ktere se bude hledat mozny vektor kamenu
  * @param  dirX     Smer prohledavani v ose x (radek)
  * @param  dirY     Smer prohledavani v ose y (sloupec)
- * @param  playerColor Barva hrace na tahu
  * @return          Vektor souradnic X,Y novych kamenu aktulaniho hrace
  */
 TCordVec findPossibleStones(const Board& board, const int X, const int Y, const int dirX, const int dirY){
@@ -49,7 +49,6 @@ TCordVec findPossibleStones(const Board& board, const int X, const int Y, const 
 /**
  * Tah pocitace je zvolen na zaklade nejevetsiho poctu zmenenych kamenu
  * @param board       Aktulani hraci deska
- * @param nextBoard   Nova herni deska
  * @param playerColor Hrac na tahu
  */
 void ai2NextState(Board& board, const TColor playerColor){

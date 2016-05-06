@@ -96,6 +96,8 @@ void GameLogic::cleanBoard(Board& board){
  * @param  oldBoard Vychozi deska
  * @param  dirX     Smer prohledavani v ose x (radek)
  * @param  dirY     Smer prohledavani v ose y (sloupec)
+ * @param   X       Souranice X od ktere se bude hledat mozny vektor kamenu
+ * @param   Y       Souranice Y od ktere se bude hledat mozny vektor kamenu
  * @return          Vektor souradnic X,Y novych kamenu aktulaniho hrace
  */
 TCordVec GameLogic::getNewStones(const Board& oldBoard, const int X, const int Y, const int dirX, const int dirY){
@@ -135,8 +137,7 @@ void GameLogic::checkPos(const Board& board) const {
  * @brief Vygeneruje novy stav herni desky na zaklade X, Y a barvy kamene
  * @warning V pripade nemoznosti provedeni tahu vyhodi vyjimiku std::out_of_range
  * @note vyzaduje nastaveni vsech tridnich promennych.
- * @param oldBoard Deska pred polozenim novych kamenu
- * @param newBoard Deska s jiz polozeny
+ * @param board Deska pred polozenim novych kamenu
  */
 void GameLogic::nextState(Board& board){
   TCordVec vecCords, tmp;

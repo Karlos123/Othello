@@ -31,7 +31,7 @@ const TState& History::prevState(){
  * @param board       Aktualni herni deska
  * @param playerColor Hrac na tahu
  * @param blackScore  Skore (pocet kamenu) hrace za cerne kameny
- * @param WhiteScore  Skore (pocet kamenu) hrace za bile kameny
+ * @param whiteScore  Skore (pocet kamenu) hrace za bile kameny
  */
 void History::storeState(Board board, TColor playerColor, const int blackScore, const int whiteScore){
   // Odstraneni vsech ulozenych stavu ktere jsou az za aktualni pozici v historii

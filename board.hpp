@@ -22,7 +22,7 @@ class Board{
 
     /**
      * @brief Vlozi na pozici X, Y kamen barvy color.
-     * @Warning Nekontroluje meze pole
+     * @warning Nekontroluje meze pole
      * @param X     Souradnice X
      * @param Y     Souradnice Y
      * @param color Barva pokladaneho kamene
@@ -31,7 +31,7 @@ class Board{
 
     /**
      * @brief Vrati barvu kamene na pozici X, Y.
-     * @Warning Nekontroluje meze pole
+     * @warning Nekontroluje meze pole
      * @param X     Souradnice X
      * @param Y     Souradnice Y
      * @return      Barva kamene na sourdnici
@@ -49,10 +49,11 @@ class Board{
     bool isAvailable(int X, int Y) const { return (stones[X][Y] == MARKSTONE);  };
 
     /**
-     * @vraci Velikost herni desky.
+     * @brief Velikost herni desky.
      * @return Velikost herni desky
      */
     int getSize() const { return size; }; /* Vrati velikost pole */
+
 
     Board(int x);
 

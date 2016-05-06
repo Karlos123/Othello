@@ -12,7 +12,8 @@ TColor playerColorAI_1; /**< Barva kamenu hrace na tahu slouzici jen k optimaliz
  * @param  board  Vychozi deska
  * @param  dirX     Smer prohledavani v ose x (radek)
  * @param  dirY     Smer prohledavani v ose y (sloupec)
- * @param  playerColor Barva hrace na tahu
+ * @param   X       Souranice X od ktere se bude hledat mozny vektor kamenu
+ * @param   Y       Souranice Y od ktere se bude hledat mozny vektor kamenu
  * @return          Vektor souradnic X,Y novych kamenu aktulaniho hrace
  */
 TCordVec getPossibleStones(const Board& board, const int X, const int Y, const int dirX, const int dirY){
@@ -43,9 +44,8 @@ TCordVec getPossibleStones(const Board& board, const int X, const int Y, const i
 }
 
 /**
- * Tah pocitace je zvolen na zaklade nejevetsiho poctu zmenenych kamenu
+ * @brief Tah pocitace je zvolen na zaklade nejevetsiho poctu zmenenych kamenu
  * @param board       Aktulani hraci deska
- * @param nextBoard   Nova herni deska
  * @param playerColor Hrac na tahu
  */
 void ai1NextState(Board& board, const TColor playerColor){

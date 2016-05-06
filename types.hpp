@@ -5,38 +5,38 @@
 
 /**
  * @enum TColor
- * @breif Barva kamene na desce. Barva hrace.
+ * @brief Barva kamene na desce. Barva hrace.
  */
 typedef enum { NONE, BLACK, WHITE, MARKSTONE} TColor;
 
 /**
  * TCord
- * @breif Souradnice X,Y na hernim planu
+ * @brief Souradnice X,Y na hernim planu
  */
 typedef std::pair<int,int> TCord;
 
 /**
  * TCordVec
- * @breif Vektor souradnic X,Y
+ * @brief Vektor souradnic X,Y
  */
 typedef std::vector<TCord> TCordVec;
 
 /**
  * TStones
- * @breif Pole kamenu tvorene vektorem vektroru typu TColor
+ * @brief Pole kamenu tvorene vektorem vektroru typu TColor
  * @note Priklad pristupu k jednotlivemu kameni ve vektoru stones typu TStones: stones[X][Y]
  */
 typedef std::vector<std::vector<TColor>> TStones;
 
 /**
  * @enum TPlayer
- * @breif Logika hrace
+ * @brief Logika hrace
  */
 typedef enum {HUMAN, AI} TPlayer;
 
 /**
  * @enum TAI
- * @breif Typ logiky umele inteligence (obtiznost).
+ * @brief Typ logiky umele inteligence (obtiznost).
  */
 typedef enum {AI_EASY, AI_DIFFICULT} TAI;
 

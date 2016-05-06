@@ -5,7 +5,7 @@
 #include "types.hpp"
 
 /**
- * @Class GameLogic
+ * @class GameLogic
  *
  * @brief Herni logika hry starajici se o logicke operace nad hernim planem.
  *

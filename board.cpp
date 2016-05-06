@@ -4,7 +4,7 @@
 
 /**
  * @brief Incializace velikosti herni desky a konstrukce herni desky.
- * @param X pozadovana velikost herni desky.
+ * @param x Pozadovana velikost herni desky.
  */
 Board::Board(int x){
   size = x;

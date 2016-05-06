@@ -18,7 +18,6 @@ void Game::nextTurn(){
  * @brief Pokusi se provest tah ze souradnic X a Y zadanych clovekem
  * @param  X     Uzivatelem zadana souradnice X (radek)
  * @param  Y     Uzivatelem zadana souradnice Y (sloupec)
- * @param  color Barva kamene/hrace na tahu
  * @return       True Uspesne | False neuspesne polozeni kamene/u
  */
 bool Game::execTurnHuman(int X, int Y){
