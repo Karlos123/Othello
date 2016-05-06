@@ -16,7 +16,7 @@
  *
  * @brief Stara se o hru jako takovou.
  *
- * Trida uchovava  veskere auktualni informace o hre: barvu kamenu hrace na tahu, skore hracu, typ hracu (clovek, pocitac) a v pripade hry proti pocitaci i
+ * Trida uchovava veskere auktualni informace o hre: barvu kamenu hrace na tahu, skore hracu, typ hracu (clovek, pocitac) a v pripade hry proti pocitaci i
  * nastaveni obtiznosti hry (AIType). Trida se predevsim stara o chod hry, vestinu logickych operaci a ukonu prenechava herni logicice se kterou je uzce
  * provazana.
  */
@@ -84,7 +84,7 @@ class Game{
      * @param X Velikost herni desky
      * @param A Logika hrace hrajiciho za cerne kameny
      * @param B Logika hrace hrajiciho za bile kameny
-     * @param AI Typ inteligence pocitace (obtiznsost)
+     * @param AI Typ inteligence pocitace (obtiznost)
      */
     Game(int X, TPlayer A, TPlayer B, TAI AI) : board(X), history(board) {playerBlack = A; playerWhite = B; AIType = AI; std::srand(time(0));};
 };

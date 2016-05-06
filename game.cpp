@@ -100,12 +100,10 @@ bool Game::onTurnAI(){
 int Game::saveGame(QString fileName){
     QByteArray save;
     save.append(board.getSize());
-    if(isPvEGame()) // vlozit podmienku, ze ci je druhy hrac AI
+    if(isPvEGame())
         save.append(static_cast<uchar>(getAIType()) + 1);
     else
         save.append(static_cast<char>(0));
-
-    // Pridanie postupnosti vykonanych tahov do QByteArray - preiterovat cez historiu
 
     save.append(history.prepareToStore());
 
@@ -141,8 +139,6 @@ QByteArray Game::loadGame(QString fileName){
     for(uchar i = 2; i < save.length(); i++)
         if(save.at(i)/16 > save.at(0) || save.at(i)%16 > save.at(0) || !((save.at(i)/16)*(save.at(i)%16)))
             return "";
-
-    // Validita tahov sa uz asi nebude overovat...
 
     return save;
 }

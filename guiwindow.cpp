@@ -4,23 +4,24 @@
 #include <QtWidgets>
 #include <QVBoxLayout>
 
-//const int IdRole = Qt::UserRole;
-
-
 /**
- * @brief Vytvori hlavne menu, nastavi nemennu velkost okna a vytvori plochu
- * na vykreslenie hracej dosky
+ * @brief Nastavi nemennu velkost okna a nadpis, nastavi rozlozenie hlavneho menu.
  */
 GuiWindow::GuiWindow()
 {
-    //this->setFixedSize(size());
     this->setFixedSize(width()/2.25, height()/1.75);
-    //this->resize(width()/2, height()/2);
     gameInitialized = false;
+    setWindowTitle(tr("Othello"));
+    mainMenu();
+}
 
-    // MAIN MENU
 
-    // Nadpis "Othello"
+/**
+ * @brief Nastavi nadpis a tlacidla v hlavnom menu.
+ */
+void GuiWindow::mainMenu()
+{
+    // Nastavenie nadpisu "Othello"
     QLabel *appNameLabel = new QLabel(tr("Othello"));
     QFont appNameLabelFont = appNameLabel->font();
     appNameLabelFont.setWeight(QFont::Bold);
@@ -45,36 +46,30 @@ GuiWindow::GuiWindow()
     loadGameButton->setFont(loadGameButtonFont);
     loadGameButton->setText(tr("Load Game"));
 
-    // Pripojenie stlacenia tlacidla na obsluzne funkcie, ktore zmenia menu
+    // Pripojenie stlacenia tlacidiel na obsluzne funkcie, ktore zmenia menu, resp. vyberu subor na nacitanie
     connect(newGameButton, SIGNAL(clicked(bool)), this, SLOT(newGame()));
     connect(loadGameButton, SIGNAL(clicked(bool)), this, SLOT(loadGame()));
 
-    // Vytvorenie Vertical Box layoutu a vlozenie widgetov
+    // Vytvorenie Vertical Box rozlozenia a vlozenie widgetov, aplikovanie rozlozenia
     QVBoxLayout *mainMenuLayout = new QVBoxLayout;
     mainMenuLayout->addWidget(appNameLabel);
     mainMenuLayout->addWidget(newGameButton);
     mainMenuLayout->addWidget(loadGameButton);
 
     setLayout(mainMenuLayout);
-
-    setWindowTitle(tr("Othello"));
-    ///TODO: pridat ikonu okna
 }
 
 
 /**
- * @brief Odstrani aktualny layout, je to zredukovana verzia kodu, ktory dal
- * nejaky spasitel na StackOverflow (ten kod co tam bol spracovaval aj sublayouts,
- * ktore my nepouzivame). Bez tejto funkcie by zostavali predosle nadpisy tlacidla
- * atd na dalsom rozhrani
+ * @brief Skryje a odstrani vsetky widgety aktualneho rozlozenia, aby sa mohlo nastavit nove rozlozenie okna.
  */
 void GuiWindow::clearLayout()
 {
     QLayout *layout = this->layout();
     QLayoutItem *item;
     QWidget *widget;
-    while ((item = layout->takeAt(0))) {
-        if ((widget = item->widget()) != 0) {
+    while((item = layout->takeAt(0))){
+        if((widget = item->widget()) != 0){
             widget->hide();
             delete widget;
         }
@@ -86,13 +81,12 @@ void GuiWindow::clearLayout()
 
 
 /**
- * @brief "New Game" menu, umoznuje vybrat si velkost pola, typ hry a typ AI
+ * @brief Menu novej hry, umoznuje vybrat si velkost pola, typ hry a typ AI.
  */
 void GuiWindow::newGame()
 {
+    // Odstrani stare rozlozenie, tj. hlavne menu
     clearLayout();
-
-    // NEW GAME MENU
 
     // Nadpis "New Game Options"
     QLabel *newGameMenuLabel = new QLabel(tr("New Game Options"));
@@ -143,10 +137,9 @@ void GuiWindow::newGame()
     startButton->setFont(startButtonFont);
     startButton->setText(tr("Start"));
 
-    // vlozit sem connecty na event handlery, teoreticky by stacil jediny connect - na tlacidlo start hry
-    // v tom pripade by sa vlastnosti hry zvolene uzivatelom nastavili pred zacatim hry a nereagovalo by sa na zbytocne eventy
-    connect(startButton, SIGNAL(clicked(bool)), this, SLOT(game()));
-    connect(gameTypeComboBox, SIGNAL(activated(int)), this, SLOT(hideAISelection()));
+    // Pripojenie interaktivnych prvkov na obsluzne funkcie
+    connect(startButton, SIGNAL(clicked(bool)), this, SLOT(game())); // Pripojenie tlacidla startu hry
+    connect(gameTypeComboBox, SIGNAL(activated(int)), this, SLOT(hideAISelection())); // Schovanie vyberu typu AI ak je zvolena hra proti hracovi
 
     // Vertical Box Layout - widgety sa ukladaju pod seba v poradi, v akom sme ich vlozili
     QVBoxLayout *newGameMenuLayout = new QVBoxLayout;
@@ -159,11 +152,14 @@ void GuiWindow::newGame()
     newGameMenuLayout->addWidget(aiSelectComboBox);
     newGameMenuLayout->addWidget(startButton);
 
-    // Nastavime layout a aktivujeme sizeChanged, aby sme nastavili velkost hracej plochy
+    // Nastavime rozlozenie
     setLayout(newGameMenuLayout);
 }
 
 
+/**
+ * @brief Skontroluje, ci je zvolena hra proti hracovi, respektive proti AI a podla toho skryje/zobrazi vyber typu AI.
+ */
 void GuiWindow::hideAISelection(){
     int pve = gameTypeComboBox->itemData(gameTypeComboBox->currentIndex(), Qt::UserRole).toInt();
     if(pve){
@@ -178,8 +174,8 @@ void GuiWindow::hideAISelection(){
 
 
 /**
- * @brief "Load Game" menu, treba pridat handler na nacitanie suboru daneho uzivatelom,
- * ak nie je zadany tak aktivovat "New Game" menu?
+ * @brief Nacitavanie hry
+ * Vyvola "Open file" dialog, kde si uzivatel moze vybrat subor ulozenej hry, ktory chce nacitat. Ak nie je mozne nacitat pozadovany subor alebo neexistuje, tak sa zrusi vyber suboru na nacitanie. Ak sa podarilo nacitavanie hry, tak sa vytvori nova hra s nacitanou konfiguraciou.
  */
 void GuiWindow::loadGame()
 {
@@ -194,70 +190,79 @@ void GuiWindow::loadGame()
     game(save);
 }
 
+
 /**
- * @brief
+ * @brief Rozlozenie okna pocas hry, in-game interface
+ * @param save Bajtove pole ziskane zo suboru ulozenej hry
+ * Vytvori vykreslovaciu plochu pre hraciu dosku a pozadovane informacie, vytvori v nej novu hru na zaklade zvolenych nastaveni a nastavi rozlozenie okna pre hru.
+ * Ak je save prazdny retazec (implicitna moznost), tak sa tvori hra na zaklade uzivatelom zvolenych nastaveni; inak sa vytvori hra z bajtoveho pola save,
+ * kde na prvom bajte je velkost hracej plochy, na druhom bajte je typ hry a AI a dalej je postupnost vykonanych tahov.
  */
 void GuiWindow::game(QByteArray save)
 {
     uchar boardSize, pve, ai;
-    if(save.isEmpty()){
+    if(save.isEmpty()){ // Nova hra, ziskame zvolene nastavenia
         boardSize = boardSizeComboBox->itemData(boardSizeComboBox->currentIndex(), Qt::UserRole).toInt();
         pve = gameTypeComboBox->itemData(gameTypeComboBox->currentIndex(), Qt::UserRole).toInt();
         ai = aiSelectComboBox->itemData(aiSelectComboBox->currentIndex(), Qt::UserRole).toInt();
     }
-    else{
+    else{ // Nacitana hra, ziskame nastavenia z bajtoveho pola save
         boardSize = save.at(0);
         pve = save.at(1);
         ai = save.at(1) - 1;
     }
 
+    // Cistenie rozlozenia musi byt vykonane po ziskavani informacii, lebo by sa inak vycistili aj ComboBoxy s nastaveniami
     clearLayout();
 
+    // Vytvorenie renderovacej plochy a pripadne replikovanie vykonanych tahov z ulozenej hry
     boardArea = new GuiBoardArea(boardSize, HUMAN, pve? AI: HUMAN, static_cast<TAI>(ai));
     if(!save.isEmpty()){ // Vykonavanie nacitanych tahov z ulozenej hry
         boardArea->game.setOpponentType(HUMAN);
         for(int i = 2; i < save.length(); i++)
             boardArea->game.execTurnHuman(static_cast<uchar>(save.at(i))/16-1, static_cast<uchar>(save.at(i))%16-1);
-            // Mozno ohlasit chybu vykonavania tahov z nacitanej hry?
         boardArea->game.setOpponentType(pve? AI: HUMAN);
     }
 
-    // Pridat tlacidlo na historiu apod.
-
+    // Tlacidlo na ulozenie hry
     QPushButton *saveGameButton = new QPushButton;
     QFont saveGameButtonFont = saveGameButton->font();
     saveGameButtonFont.setPointSize(saveGameButtonFont.pointSize()*1.5);
     saveGameButton->setFont(saveGameButtonFont);
     saveGameButton->setText(tr("Save Game"));
 
+    // Tlacidlo pre navrat v historii
     QPushButton *histBackButton = new QPushButton;
     QFont histBackButtonFont = histBackButton->font();
     histBackButtonFont.setPointSize(histBackButtonFont.pointSize()*1.5);
     histBackButton->setFont(histBackButtonFont);
-    histBackButton->setText(tr("◄")); // ◄ ←
+    histBackButton->setText(tr("◄"));
+
+    // Napis "History" medzi tlacidlami
     QLabel *histLabel = new QLabel(tr("History"));
     QFont histLabelFont = histLabel->font();
     //histLabelFont.setWeight(QFont::Bold);
     histLabelFont.setPointSize(histLabelFont.pointSize()*2);
     histLabelFont.setFamily("Rockwell");
     histLabel->setFont(histLabelFont);
-    //newGameMenuLabel->setScaledContents(true);
     histLabel->setAlignment(Qt::AlignCenter);
+
+    // Tlacidlo pre posun vpred v historii hry
     QPushButton *histForwButton = new QPushButton;
     QFont histForwButtonFont = histForwButton->font();
     histForwButtonFont.setPointSize(histForwButtonFont.pointSize()*1.5);
     histForwButton->setFont(histForwButtonFont);
-    histForwButton->setText(tr("►")); // ► →
+    histForwButton->setText(tr("►"));
 
-
+    // Spojenie tlacidiel s obsluznymi metodami
     connect(histBackButton, SIGNAL(clicked(bool)), this, SLOT(histBack()));
     connect(histForwButton, SIGNAL(clicked(bool)), this, SLOT(histForw()));
     connect(saveGameButton, SIGNAL(clicked(bool)), this, SLOT(saveGame()));
 
-
+    // Zvacsenie okna
     this->setFixedSize(width()*2.25, height()*1.75);
 
-    // Grid layout - konecne nieco ine nez Vertical Box
+    // Mriezkove rozlozenie okna, kam sa ulozi vykreslovacia plocha a elementy UI
     QGridLayout *gameLayout = new QGridLayout;
     gameLayout->addWidget(boardArea, 0, 0, 7, 7);
     gameLayout->addWidget(histBackButton, 7, 0, 1, 1);
@@ -268,6 +273,11 @@ void GuiWindow::game(QByteArray save)
     setLayout(gameLayout);
 }
 
+
+/**
+ * @brief Ulozenie hry
+ * Vyvola "Save file" dialog, kde si uzivatel moze vybrat umiestnenie a nazov suboru, do ktoreho sa hra ulozi. Ak nie je mozne ulozit hru do pozadovaneho suboru, tak sa opat ponukne specifikovanie suboru do ktoreho sa ma hra ulozit.
+ */
 void GuiWindow::saveGame()
 {
     if(boardArea->game.isEnd())
@@ -284,6 +294,10 @@ void GuiWindow::saveGame()
 }
 
 
+/**
+ * @brief Navrat spat v historii
+ * Vrati hraciu plochu o tah hraca spat v historii (preskakuje tahy AI)
+ */
 void GuiWindow::histBack()
 {
     if(boardArea->game.isEnd())
@@ -294,6 +308,10 @@ void GuiWindow::histBack()
 }
 
 
+/**
+ * @brief Posun vpred v historii
+ * Posunie hraciu plochu o tah hraca vpred v historii (preskakuje tahy AI)
+ */
 void GuiWindow::histForw()
 {
     if(boardArea->game.isEnd())
@@ -304,7 +322,10 @@ void GuiWindow::histForw()
 }
 
 
-// Event reagujuci na stlacenie mysi, vykonava samotnu hru
+/**
+ * @brief Udalost kliknutia na UI
+ * Okno reaguje na kliknutie mysi specifickym sposobom, ak nastal koniec hry, cim sa okno zavrie.
+ */
 void GuiWindow::mousePressEvent(QMouseEvent *)
 {
     if(!gameInitialized)
