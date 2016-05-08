@@ -60,21 +60,22 @@ const QByteArray History::prepareToStore(){
 
   bool breaker = false;
   while(niter != states.end()){
-      for (int x = 0; x < size; x++) {
-          for (int y = 0; y < size; y++){
-              if((iter->board.getStone(x, y) == NONE || iter->board.getStone(x, y) == MARKSTONE) && (niter->board.getStone(x, y) == BLACK || niter->board.getStone(x, y) == WHITE)){
-                res += static_cast<unsigned char>((x + 1)*16 + y + 1);
-                breaker = true;
-                break;
-              }
-          }
-          if(breaker){
-              breaker = false;
-              break;
-          }
+    for (int x = 0; x < size; x++) {
+      for (int y = 0; y < size; y++){
+        if((iter->board.getStone(x, y) == NONE || iter->board.getStone(x, y) == MARKSTONE) &&
+            (niter->board.getStone(x, y) == BLACK || niter->board.getStone(x, y) == WHITE)){
+          res += static_cast<unsigned char>((x + 1)*16 + y + 1);
+          breaker = true;
+          break;
+        }
       }
-      iter++;
-      niter++;
+      if(breaker){
+        breaker = false;
+        break;
+      }
+    }
+    iter++;
+    niter++;
   }
   return res;
 }

@@ -97,25 +97,23 @@ bool Game::onTurnAI(){
  * @return 0 kdyz sa operace vydarila, nenulova hodnota v pripade chyby
  */
 int Game::saveGame(QString fileName){
-    QByteArray save;
-    save.append(board.getSize());
-    if(isPvEGame()) // vlozit podmienku, ze ci je druhy hrac AI
-        save.append(static_cast<uchar>(getAIType()) + 1);
-    else
-        save.append(static_cast<char>(0));
+  QByteArray save;
+  save.append(board.getSize());
+  if(isPvEGame())
+    save.append(static_cast<uchar>(getAIType()) + 1);
+  else
+    save.append(static_cast<char>(0));
 
-    // Pridanie postupnosti vykonanych tahov do QByteArray - preiterovat cez historiu
+  save.append(history.prepareToStore());
 
-    save.append(history.prepareToStore());
+  QFile file(fileName);
+  if(!file.open(QIODevice::WriteOnly))
+    return 1;
 
-    QFile file(fileName);
-    if(!file.open(QIODevice::WriteOnly))
-        return 1;
+  file.write(save);
+  file.close();
 
-    file.write(save);
-    file.close();
-
-    return 0;
+  return 0;
 }
 
 /**
@@ -123,25 +121,23 @@ int Game::saveGame(QString fileName){
  * @return bajtove pole ulozene hry jestli sa operace vydarila, prazdne bajtove pole v pripade chyby
  */
 QByteArray Game::loadGame(QString fileName){
-    QFile file(fileName);
-    if(!file.open(QIODevice::ReadOnly))
-        return "";
+  QFile file(fileName);
+  if(!file.open(QIODevice::ReadOnly))
+    return "";
 
-    QByteArray save = file.readAll();
-    file.close();
+  QByteArray save = file.readAll();
+  file.close();
 
-    // Kontrola Save Game suboru
+  // Kontrola Save Game suboru
 
-    // Kontrola velkosti: +2 znaky kvoli informaciam o velkosti pola a AI, -4 znaky kvoli pociatocnym 4 kamenom
-    if(save.length() > save.at(0)*save.at(0) - 2)
-        return "";
+  // Kontrola velkosti: +2 znaky kvoli informaciam o velkosti pola a AI, -4 znaky kvoli pociatocnym 4 kamenom
+  if(save.length() > save.at(0)*save.at(0) - 2)
+    return "";
 
-    // Kontrola, ci policka su v platnom rozsahu hodnot
-    for(uchar i = 2; i < save.length(); i++)
-        if(save.at(i)/16 > save.at(0) || save.at(i)%16 > save.at(0) || !((save.at(i)/16)*(save.at(i)%16)))
-            return "";
+  // Kontrola, ci policka su v platnom rozsahu hodnot
+  for(uchar i = 2; i < save.length(); i++)
+    if(save.at(i)/16 > save.at(0) || save.at(i)%16 > save.at(0) || !((save.at(i)/16)*(save.at(i)%16)))
+      return "";
 
-    // Validita tahov sa uz asi nebude overovat...
-
-    return save;
+  return save;
 }

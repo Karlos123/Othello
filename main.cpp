@@ -75,14 +75,18 @@ bool loadCin(int& X, int& Y){
  * @note V pripade ze je definovano uzivatelske rozhrani (GUI) spusti hru za pomoci QWidgets, jinak probiha hra v terminalu | prikazove radce.
  */
 #ifdef OTH_USE_GUI
+
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    GuiWindow w;
-    w.show();
+  QCoreApplication::addLibraryPath("./");
+  QApplication a(argc, argv);
+  GuiWindow w;
+  w.show();
 
-    return a.exec();
-  #else
+  return a.exec();
+
+#else
+
 int main(){
 
   int X, Y;
@@ -116,6 +120,7 @@ int main(){
               << (game.onTurnAI() ? "\n" : "") <<  std::flush;
   }
   std::cout << "END" << std::endl;
-   return 1;
+  
+  return 1;
   #endif
 }
